@@ -24,7 +24,7 @@ class RegisterViewModel : ViewModel() {
                     response: Response<RegisterResponse>
                 ) {
                     if (response.isSuccessful) {
-                        listUsers.postValue(response.body()?.error)
+                        listUsers.postValue(response.body()?.status)
                     }
                 }
 
