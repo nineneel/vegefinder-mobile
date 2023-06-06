@@ -3,19 +3,10 @@ package com.dicoding.vegefinder.data.response
 import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
-    @SerializedName("error")
-    val error: Boolean,
-    @SerializedName("loginResult")
-    val loginResult: LoginResult,
+    @SerializedName("status")
+    val status: Boolean,
     @SerializedName("message")
-    val message: String
-)
-
-data class LoginResult(
-    @SerializedName("name")
-    val name: String,
+    val message: String,
     @SerializedName("token")
     val token: String,
-    @SerializedName("userId")
-    val userId: String
 )
