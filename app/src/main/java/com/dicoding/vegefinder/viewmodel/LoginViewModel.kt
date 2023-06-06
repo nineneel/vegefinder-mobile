@@ -24,10 +24,9 @@ class LoginViewModel : ViewModel() {
                     response: Response<LoginResponse>
                 ) {
                     if (response.isSuccessful) {
-                        listUsers.postValue(response.body()?.error)
+                        listUsers.postValue(response.body()?.status)
                     }
                 }
-
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     Log.d("Failure", t.message.toString())
                 }

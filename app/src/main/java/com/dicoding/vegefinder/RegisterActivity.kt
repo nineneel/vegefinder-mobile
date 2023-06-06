@@ -38,11 +38,15 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.btnRegis.setOnClickListener {
             val username1 = username.text.toString()
+            val avatarId = (1..4).random()
             val data = RegisterRequest(
                 binding.registerName.text.toString(),
                 binding.registerEmail.text.toString(),
-                binding.registerPassword.text.toString()
+                binding.registerPassword.text.toString(),
+                binding.validPassword.text.toString(),
+                avatarId.toString()
             )
+
             registerViewModel.register(data)
             registerViewModel.getSearchUsers().observe(this){
 //                Toast.makeText(this@RegisterActivity, it.toString(), Toast.LENGTH_SHORT).show()

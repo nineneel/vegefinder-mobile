@@ -87,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
 
         btnRegister = findViewById(R.id.sigUp)
         btnRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
     }
 }
