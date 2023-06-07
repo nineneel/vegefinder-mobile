@@ -9,16 +9,20 @@ class SessionManager(context: Context) {
     companion object {
         const val KEY_TOKEN = "token"
         const val KEY_IS_LOGGED_IN = "isLoggedIn"
+        var userToken : String? = null
     }
 
     fun saveAuthToken(token: String?) {
         val editor = prefs.edit()
         editor.putString(KEY_TOKEN, token)
         editor.apply()
+
+        userToken = token
     }
 
-    fun fetchAuthToken(): String? {
-        return prefs.getString(KEY_TOKEN, null)
+    fun getUserToken(): String? {
+        userToken = prefs.getString(KEY_TOKEN, null)
+        return userToken
     }
 
     fun setLogin(isLoggedIn: Boolean) {
