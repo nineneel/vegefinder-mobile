@@ -20,8 +20,8 @@ class Home : Fragment() {
 
     private val historyList = listOf(
         History(
-            R.drawable.bayam,
-            "Bayam Hijau",
+            R.drawable.kangkung,
+            "Bayam",
             "Daun",
             "Nnanananan"
         ),

@@ -7,13 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.dicoding.vegefinder.R
 
+
 class DetailJenisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailjenis)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Detail Jenis"
+
 
         val typeVege = intent.getStringExtra("typeVege")
         val type = intent.getStringExtra("type")
