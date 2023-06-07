@@ -3,6 +3,8 @@ package com.dicoding.vegefinder
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,7 +16,7 @@ import com.dicoding.vegefinder.databinding.ActivityLoginBinding
 import com.dicoding.vegefinder.viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var etUsername: EditText
+    private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: TextView
@@ -26,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+
         val view = binding.root
         setContentView(view)
 
@@ -33,12 +36,6 @@ class LoginActivity : AppCompatActivity() {
             this,
             ViewModelProvider.NewInstanceFactory()
         )[LoginViewModel::class.java]
-
-        etUsername = findViewById(R.id.et_username)
-        etPassword = findViewById(R.id.et_password)
-        btnLogin = findViewById(R.id.btn_login)
-
-        etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         sessionManager = SessionManager(this)
 
@@ -48,13 +45,19 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        etEmail = findViewById(R.id.et_email)
+        etPassword = findViewById(R.id.et_password)
+        btnLogin = findViewById(R.id.btn_login)
+
+        etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
         btnLogin.setOnClickListener {
-            val username = etUsername.text.toString().trim()
+            val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            if (username.isEmpty()) {
-                etUsername.error = "Username cannot be empty"
-                etUsername.requestFocus()
+            if (email.isEmpty()) {
+                etEmail.error = "Username cannot be empty"
+                etEmail.requestFocus()
                 return@setOnClickListener
             }
 
@@ -64,24 +67,50 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (password.length < 8) {
-                etPassword.error = "Password must be at least 8 characters"
-                etPassword.requestFocus()
-                return@setOnClickListener
-            }
-
-            sessionManager.saveAuthToken("dummy_token")
             val data = LoginRequest(
-                binding.etUsername.text.toString(),
+                binding.etEmail.text.toString(),
                 binding.etPassword.text.toString()
             )
 
+            showLoading(true)
             loginViewModel.login(data)
-            loginViewModel.getSearchUsers().observe(this) {
-                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-                if (it == false) {
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            loginViewModel.getLoginResponse().observe(this) {response ->
+                if (response != null) {
+
+                    if (response.status == "success") {
+                        sessionManager.saveAuthToken(response.token)
+                        sessionManager.setLogin(true)
+
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        val status = response.status
+                        val errorMessage = response.message
+
+                        if(status == "failed"){
+                            etEmail.error = errorMessage
+                            etEmail.requestFocus()
+                            return@observe
+                        }else{
+                            val emailError = response.errors?.email?.getOrNull(0)
+                            val passwordError = response.errors?.password?.getOrNull(0)
+
+                            if(emailError != null){
+                                etEmail.error = emailError
+                                etEmail.requestFocus()
+                                return@observe
+                            }
+
+                            if(passwordError != null){
+                                etPassword.error = passwordError
+                                etPassword.requestFocus()
+                                return@observe
+                            }
+                        }
+                    }
                 }
+                showLoading(false)
             }
         }
 
@@ -89,5 +118,10 @@ class LoginActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
+    }
+
+
+    private fun showLoading(state: Boolean) {
+        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
     }
 }

@@ -4,11 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class RegisterResponse(
     @SerializedName("status")
-    val status: Boolean,
+    val status: String? = null,
     @SerializedName("message")
-    val message: String,
+    val message: String? = null,
     @SerializedName("result")
-    val result: Result
+    val result: Result? = null,
+    @SerializedName("errors")
+    val errors: AuthError? = null
+)
+
+data class AuthError(
+    @SerializedName("email")
+    val email: ArrayList<String>? = null,
+    @SerializedName("password")
+    val password: ArrayList<String>? = null,
 )
 
 data class Result(
@@ -23,7 +32,7 @@ data class Result(
     @SerializedName("avatar_id")
     val avatar_id: Int,
     @SerializedName("updated_at")
-    val updated_at: Int,
+    val updated_at: String,
     @SerializedName("created_at")
-    val created_at: Int,
+    val created_at: String,
 )
