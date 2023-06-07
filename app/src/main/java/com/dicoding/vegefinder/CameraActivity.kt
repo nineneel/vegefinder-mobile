@@ -52,7 +52,7 @@ class CameraActivity : AppCompatActivity() {
             "Take Photo",
             Toast.LENGTH_SHORT
         ).show()
-        finish()
+//        finish()
 //        val photoFile = createFile(application)
 //        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 //        imageCapture.takePicture(

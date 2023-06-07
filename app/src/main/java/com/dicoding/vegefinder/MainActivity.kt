@@ -6,10 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -55,6 +58,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(Home())
+
+        val profileImage = findViewById<ImageView>(R.id.app_profile)
+
+        profileImage.setOnClickListener {
+            Intent(this, ProfileActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
+        val sessionManager = SessionManager(this@MainActivity)
+        val token = sessionManager.getUserToken()
+
+        Log.d("HOME", "token: $token")
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(

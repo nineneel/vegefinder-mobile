@@ -7,15 +7,17 @@ import androidx.lifecycle.ViewModel
 import com.dicoding.vegefinder.api.RetrofitClient
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.RegisterResponse
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class RegisterViewModel : ViewModel() {
 
-    val listUsers = MutableLiveData<Boolean>()
+    val registerResponse = MutableLiveData<RegisterResponse>()
 
     fun register(registerRequest: RegisterRequest) {
+
         RetrofitClient.apiInstance
             .register(registerRequest)
             .enqueue(object : Callback<RegisterResponse> {
@@ -23,19 +25,28 @@ class RegisterViewModel : ViewModel() {
                     call: Call<RegisterResponse>,
                     response: Response<RegisterResponse>
                 ) {
+                    val statusCode = response.code()
+
                     if (response.isSuccessful) {
-                        listUsers.postValue(response.body()?.status)
+                        registerResponse.postValue(response.body())
+                    }else{
+                        if(statusCode == 422){
+                            val errorBody = response.errorBody()?.string()
+                            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+                            registerResponse.postValue(errorResponse)
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Log.d("Failure", t.message.toString())
+                    Log.v("Failure",  t.message.toString())
                 }
 
             })
+
     }
 
-    fun getSearchUsers(): LiveData<Boolean> {
-        return listUsers
+    fun getResponse(): LiveData<RegisterResponse> {
+        return registerResponse
     }
 }
