@@ -17,7 +17,7 @@ class Explore : Fragment() {
     private val exploreList = listOf(
         ExploreData(
             R.drawable.kangkung,
-            "Bayam",
+            "Bayam hijau putih",
             "nananana"
         ),
         ExploreData(
