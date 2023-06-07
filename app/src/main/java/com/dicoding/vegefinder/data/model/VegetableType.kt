@@ -1,8 +1,8 @@
-package com.dicoding.vegefinder.Adapter
+package com.dicoding.vegefinder.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Jenis(
+data class VegetableType(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
@@ -14,12 +14,5 @@ data class Jenis(
     @SerializedName("type_group_id")
     val typeGroupId: Int,
     @SerializedName("type_group")
-    val typeGroups: TypeGroup
-)
-
-data class TypeGroup(
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("name")
-    val name: String
+    val typeGroups: VegetableGroupType
 )
