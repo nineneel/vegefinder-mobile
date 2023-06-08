@@ -40,7 +40,7 @@ class CameraActivity : AppCompatActivity() {
             createCustomTempFile(application).also {
                 val photoURI: Uri = FileProvider.getUriForFile(
                     this@CameraActivity,
-                    "com.example.tfliteexample",
+                    "com.dicoding.vegefinder",
                     it
                 )
                 currentPhotoPath = it.absolutePath
