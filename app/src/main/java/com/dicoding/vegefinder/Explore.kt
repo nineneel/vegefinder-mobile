@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.ExploreAdapter
 import com.dicoding.vegefinder.Adapter.ExploreData
-import com.dicoding.vegefinder.Adapter.History
-import com.dicoding.vegefinder.Adapter.JenisAdapter
 
 class Explore : Fragment() {
 
@@ -67,16 +65,21 @@ class Explore : Fragment() {
         )
     )
 
+
+    private lateinit var exploreAdapter: ExploreAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_explore, container, false)
+        val exploreView = inflater.inflate(R.layout.fragment_explore, container, false)
 
-        val recyclerViewExplore = view.findViewById<RecyclerView>(R.id.rv_explore)
+
+
+        val recyclerViewExplore = exploreView.findViewById<RecyclerView>(R.id.rv_explore)
         recyclerViewExplore.layoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerViewExplore.adapter = ExploreAdapter(exploreList, requireContext())
 
-        return view
+        return exploreView
     }
 }

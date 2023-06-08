@@ -13,5 +13,7 @@
         <item name="android:statusBarColor">@color/green</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">sans-serif</item>
+        <!-- Primary brand color. -->
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
 </resources>
