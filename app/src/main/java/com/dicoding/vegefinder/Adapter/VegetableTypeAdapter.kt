@@ -8,11 +8,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Activity.DetailJenisActivity
 import com.dicoding.vegefinder.R
+import com.dicoding.vegefinder.data.model.VegetableType
 
-class JenisAdapter (private val itemList: List<Jenis>, private val context: Context) :
-    RecyclerView.Adapter<JenisAdapter.ViewHolder>() {
+class VegetableTypeAdapter(private val context: Context) : RecyclerView.Adapter<VegetableTypeAdapter.ViewHolder>() {
+
+    private val itemList = ArrayList<VegetableType>()
+
+    fun setList(types: ArrayList<VegetableType>){
+        itemList.clear()
+        itemList.addAll(types)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -38,18 +47,23 @@ class JenisAdapter (private val itemList: List<Jenis>, private val context: Cont
             itemView.setOnClickListener(this)
         }
 
-        fun bind(item: Jenis) {
-            imageView.setImageResource(item.image)
-            typeTextView.text = item.type
-            typeVegeTextView.text = item.typeVege
+        fun bind(item: VegetableType) {
+            Glide.with(itemView)
+                .asBitmap()
+                .load("https://storage.googleapis.com/vegefinder-bucket/${item.thumbnail}")
+                .centerCrop()
+                .into(imageView)
+
+            typeTextView.text = item.name
+            typeVegeTextView.text = item.typeGroups.name
         }
 
         override fun onClick(view: View) {
             val intent = Intent(context, DetailJenisActivity::class.java)
-            intent.putExtra("image", itemList[adapterPosition].image)
-            intent.putExtra("type", itemList[adapterPosition].type)
-            intent.putExtra("typeVege", itemList[adapterPosition].typeVege)
-            intent.putExtra("desc", itemList[adapterPosition].desc)
+            intent.putExtra("image", itemList[adapterPosition].thumbnail)
+            intent.putExtra("type", itemList[adapterPosition].name)
+            intent.putExtra("typeVege", itemList[adapterPosition].typeGroups.name)
+            intent.putExtra("desc", itemList[adapterPosition].description)
 
             context.startActivity(intent)
         }

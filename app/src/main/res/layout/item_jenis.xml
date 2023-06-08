@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    android:padding="8dp"
+    android:layout_margin="6dp"
     android:elevation="2dp">
 
     <LinearLayout
@@ -24,29 +23,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <TextView
-                android:id="@+id/item_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="type"
-                android:textColor="#969696"
-                android:textSize="10sp" />
+            android:paddingStart="16dp">
 
             <TextView
                 android:id="@+id/item_typeVege"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="type"
+                android:textColor="#969696"
+                android:textSize="10sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/item_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Type Vege"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

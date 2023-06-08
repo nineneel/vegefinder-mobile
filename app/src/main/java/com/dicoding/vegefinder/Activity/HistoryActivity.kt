@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.vegefinder.Adapter.ExploreData
 import com.dicoding.vegefinder.Adapter.History
 import com.dicoding.vegefinder.Adapter.HistoryAdapter
 import com.dicoding.vegefinder.Adapter.HistoryallAdapter

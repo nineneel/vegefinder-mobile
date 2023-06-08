@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.VegeFinder"
     tools:context=".Activity.ProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +30,6 @@
         android:layout_marginTop="32dp"
         android:text="Name User"
         android:textSize="28dp"
-        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/iv_profile"
         app:layout_constraintTop_toTopOf="@+id/iv_profile" />
@@ -67,7 +67,7 @@
         android:drawablePadding="8dp"
         android:drawableTint="#599344"
         android:text="Saved"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorPrimary"
         android:textSize="14dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

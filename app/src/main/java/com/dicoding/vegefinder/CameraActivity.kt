@@ -1,60 +1,125 @@
 package com.dicoding.vegefinder
 
-import android.content.ActivityNotFoundException
+
 import android.content.Intent
-import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+import android.util.Log
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import com.dicoding.vegefinder.databinding.ActivityCameraBinding
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
-
-    lateinit var imageView: ImageView
-    lateinit var button: Button
-    val REQUEST_IMAGE_CAPTURE = 1000
-    lateinit var capturedImageBitmap: Bitmap
-    lateinit var viewResultButton: Button
+    private lateinit var binding: ActivityCameraBinding
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private var imageCapture: ImageCapture? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
 
-        imageView = findViewById(R.id.Image_Save)
-        button = findViewById(R.id.btn_take_picture)
-        viewResultButton = findViewById(R.id.view_result_button)
-        viewResultButton.visibility = View.GONE
-        button.visibility = View.VISIBLE
+        binding = ActivityCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        button.setOnClickListener{
-
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-            try {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }catch (e: ActivityNotFoundException){
-                Toast.makeText(this,"Error: " + e.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
+        binding.captureImage.setOnClickListener { takePhoto() }
+        binding.switchCamera.setOnClickListener {
+            cameraSelector = if (cameraSelector.equals(CameraSelector.DEFAULT_BACK_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA
+            else CameraSelector.DEFAULT_BACK_CAMERA
+            startCamera()
         }
-        viewResultButton.setOnClickListener {
-            Toast.makeText(this, "Menampilkan hasil gambar...", Toast.LENGTH_SHORT).show()
-        }
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
-            viewResultButton.visibility = View.VISIBLE
-            button.visibility = View.GONE
+    public override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+        startCamera()
+    }
 
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+//        Log.d("test", "testt")
+        Toast.makeText(
+            this,
+            "Take Photo",
+            Toast.LENGTH_SHORT
+        ).show()
+//        finish()
+//        val photoFile = createFile(application)
+//        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+//        imageCapture.takePicture(
+//            outputOptions,
+//            ContextCompat.getMainExecutor(this),
+//            object : ImageCapture.OnImageSavedCallback {
+//                override fun onError(exc: ImageCaptureException) {
+//                    Toast.makeText(
+//                        this@CameraActivity,
+//                        "Gagal mengambil gambar.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+//                    Toast.makeText(
+//                        this@CameraActivity,
+//                        "Berhasil mengambil gambar.",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        )
+    }
+
+    private fun startCamera() {
+
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
+
+            imageCapture = ImageCapture.Builder().build()
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this,
+                    cameraSelector,
+                    preview,
+                    imageCapture
+                )
+
+            } catch (exc: Exception) {
+                Toast.makeText(
+                    this@CameraActivity,
+                    "Gagal memunculkan kamera.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun hideSystemUI() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         }
-        else{
-            super.onActivityResult(requestCode, resultCode, data)
-        }
+        supportActionBar?.hide()
     }
 }
