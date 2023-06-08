@@ -2,22 +2,23 @@ package com.dicoding.vegefinder.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Activity.DetailJenisActivity
 import com.dicoding.vegefinder.R
-import com.dicoding.vegefinder.data.model.VegetableType
 
-class VegetableTypeAdapter(private val context: Context) : RecyclerView.Adapter<VegetableTypeAdapter.ViewHolder>() {
+class JenisAdapter(private val context: Context) : RecyclerView.Adapter<JenisAdapter.ViewHolder>() {
 
-    private val itemList = ArrayList<VegetableType>()
+    private val itemList = ArrayList<Jenis>()
 
-    fun setList(types: ArrayList<VegetableType>){
+    fun setList(types: ArrayList<Jenis>){
         itemList.clear()
         itemList.addAll(types)
         notifyDataSetChanged()
@@ -47,7 +48,8 @@ class VegetableTypeAdapter(private val context: Context) : RecyclerView.Adapter<
             itemView.setOnClickListener(this)
         }
 
-        fun bind(item: VegetableType) {
+        fun bind(item: Jenis) {
+//            imageView.setImageResource(item.thumbnail)
             Glide.with(itemView)
                 .asBitmap()
                 .load("https://storage.googleapis.com/vegefinder-bucket/${item.thumbnail}")
@@ -59,12 +61,14 @@ class VegetableTypeAdapter(private val context: Context) : RecyclerView.Adapter<
         }
 
         override fun onClick(view: View) {
+            Log.v("adapter", "test masuk cuy")
+
             val intent = Intent(context, DetailJenisActivity::class.java)
             intent.putExtra("image", itemList[adapterPosition].thumbnail)
             intent.putExtra("type", itemList[adapterPosition].name)
             intent.putExtra("typeVege", itemList[adapterPosition].typeGroups.name)
             intent.putExtra("desc", itemList[adapterPosition].description)
-
+//
             context.startActivity(intent)
         }
     }
