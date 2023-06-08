@@ -17,18 +17,19 @@ class VegetableTypeViewModel: ViewModel() {
     fun setVegetableType(){
         RetrofitClient.apiInstance
             .getHomeTypes()
-            .enqueue(object : Callback<VegetableTypeResponse>{
+            .enqueue(object : Callback<ArrayList<VegetableType>>{
+
                 override fun onResponse(
-                    call: Call<VegetableTypeResponse>,
-                    response: Response<VegetableTypeResponse>
-                ){
+                    call: Call<ArrayList<VegetableType>>,
+                    response: Response<ArrayList<VegetableType>>
+                ) {
                     Log.v("Failure", "testt is masuk ${response.code()}")
                     if (response.isSuccessful) {
-                        vegetableTypeResponse.postValue(response.body()?.types)
+                        vegetableTypeResponse.postValue(response.body())
                     }
                 }
 
-                override fun onFailure(call: Call<VegetableTypeResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ArrayList<VegetableType>>, t: Throwable) {
                     Log.v("Failure", "testt ->> ${t.message.toString()}")
                     vegetableTypeResponse.postValue(null)
                 }
