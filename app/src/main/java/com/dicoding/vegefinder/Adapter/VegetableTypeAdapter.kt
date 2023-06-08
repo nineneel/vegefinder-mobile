@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Activity.DetailJenisActivity
 import com.dicoding.vegefinder.R
 
-class JenisAdapter(private val context: Context) : RecyclerView.Adapter<JenisAdapter.ViewHolder>() {
+class VegetableTypeAdapter(private val context: Context) : RecyclerView.Adapter<VegetableTypeAdapter.ViewHolder>() {
 
     private val itemList = ArrayList<Jenis>()
 

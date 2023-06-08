@@ -1,125 +1,79 @@
 package com.dicoding.vegefinder
 
-
+import android.app.Activity
 import android.content.Intent
-import android.os.Build
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowInsets
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.WindowManager
-import android.widget.Toast
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.dicoding.vegefinder.databinding.ActivityCameraBinding
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import androidx.core.content.FileProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
 
 class CameraActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityCameraBinding
-    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    private var imageCapture: ImageCapture? = null
+    private lateinit var imageResult: ImageView
+    private lateinit var takePictureBtn: FloatingActionButton
+    var currentPhotoPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityCameraBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.captureImage.setOnClickListener { takePhoto() }
-        binding.switchCamera.setOnClickListener {
-            cameraSelector = if (cameraSelector.equals(CameraSelector.DEFAULT_BACK_CAMERA)) CameraSelector.DEFAULT_FRONT_CAMERA
-            else CameraSelector.DEFAULT_BACK_CAMERA
-            startCamera()
+        setContentView(R.layout.activity_camera)
+        imageResult = findViewById(R.id.imageResult)
+        takePictureBtn = findViewById(R.id.takePictureBtn)
+        takePictureBtn.setOnClickListener {
+            startIntentCamera()
         }
     }
 
-    public override fun onResume() {
-        super.onResume()
-        hideSystemUI()
-        startCamera()
-    }
-
-    private fun takePhoto() {
-        val imageCapture = imageCapture ?: return
-//        Log.d("test", "testt")
-        Toast.makeText(
-            this,
-            "Take Photo",
-            Toast.LENGTH_SHORT
-        ).show()
-//        finish()
-//        val photoFile = createFile(application)
-//        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-//        imageCapture.takePicture(
-//            outputOptions,
-//            ContextCompat.getMainExecutor(this),
-//            object : ImageCapture.OnImageSavedCallback {
-//                override fun onError(exc: ImageCaptureException) {
-//                    Toast.makeText(
-//                        this@CameraActivity,
-//                        "Gagal mengambil gambar.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-//                    Toast.makeText(
-//                        this@CameraActivity,
-//                        "Berhasil mengambil gambar.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        )
-    }
-
-    private fun startCamera() {
-
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
-        cameraProviderFuture.addListener({
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                }
-
-            imageCapture = ImageCapture.Builder().build()
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    preview,
-                    imageCapture
-                )
-
-            } catch (exc: Exception) {
-                Toast.makeText(
+    private fun startIntentCamera() {
+        if(allCameraPermissionsGranted()) {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.resolveActivity(packageManager)
+            createCustomTempFile(application).also {
+                val photoURI: Uri = FileProvider.getUriForFile(
                     this@CameraActivity,
-                    "Gagal memunculkan kamera.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    "com.example.tfliteexample",
+                    it
+                )
+                currentPhotoPath = it.absolutePath
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                launcherIntentCamera.launch(intent)
             }
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun hideSystemUI() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS_CAMERA,
+                REQUEST_CODE_CAMERA
             )
         }
-        supportActionBar?.hide()
+    }
+
+    private fun allCameraPermissionsGranted() = REQUIRED_PERMISSIONS_CAMERA.all {
+        ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val launcherIntentCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val myFile = File(currentPhotoPath)
+            myFile.let { file ->
+                imageResult.setImageBitmap(BitmapFactory.decodeFile(file.path))
+            }
+        }
+    }
+
+    companion object {
+        private const val MAX_FONT_SIZE = 50F
+        private const val TAG = "ObjectDetectionActivity"
+        val REQUIRED_PERMISSIONS_CAMERA = arrayOf(android.Manifest.permission.CAMERA)
+        const val REQUEST_CODE_CAMERA = 10
+        const val AUTHOR = "com.example.tfliteexample"
     }
 }
