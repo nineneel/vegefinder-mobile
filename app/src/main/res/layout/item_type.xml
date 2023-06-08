@@ -9,27 +9,27 @@
     android:elevation="2dp"
     android:background="#FCF1E3"
     app:cardCornerRadius="5dp"
-    app:strokeWidth="4dp"
-    app:strokeColor="#000000">
+    app:strokeWidth="1dp"
+    app:strokeColor="#FFA129">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:layout_margin="5dp"
+            android:textColor="#FFA129"
+            android:textSize="10dp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textColor="#FFA129"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.cardview.widget.CardView>
