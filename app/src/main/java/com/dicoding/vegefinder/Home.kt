@@ -72,11 +72,8 @@ class Home : Fragment() {
 
         vegetableTypeViewModel.setVegetableType()
         vegetableTypeViewModel.getVegetableTypeResponse().observe(viewLifecycleOwner){ listJenis ->
-            Log.d("HOME","GetJenisResponse ${listJenis[0].name}")
             vegetableTypeAdapter.setList(listJenis)
         }
-
-        Log.d("HOME","GET USER TOKEN ${SessionManager.userToken}")
 
 
         viewTextView = view.findViewById(R.id.view_all)
