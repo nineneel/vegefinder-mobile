@@ -3,6 +3,7 @@ package com.dicoding.vegefinder.api
 
 import com.dicoding.vegefinder.SessionManager
 import com.dicoding.vegefinder.data.model.Vegetable
+import com.dicoding.vegefinder.data.model.VegetableType
 import com.dicoding.vegefinder.data.request.LoginRequest
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.VegetableTypeResponse
@@ -25,7 +26,7 @@ interface Api {
     @Headers("X-Requested-With: XMLHttpRequest")
     fun getHomeTypes(
         @Header("Authorization") token : String = "Bearer ${SessionManager.userToken}"
-    ): Call<VegetableTypeResponse>
+    ): Call<ArrayList<VegetableType>>
 
     @GET("vegetables")
     @Headers("X-Requested-With: XMLHttpRequest")
