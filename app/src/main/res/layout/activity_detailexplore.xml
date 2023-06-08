@@ -6,7 +6,7 @@
     android:background="@android:color/white">
 
     <ImageView
-        android:id="@+id/imageGunung"
+        android:id="@+id/iv_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="280dp"
         android:adjustViewBounds="true"
@@ -59,6 +59,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginTop="3dp"
+
                     android:src="@drawable/ic_check" />
 
 
@@ -69,11 +70,10 @@
                     android:layout_marginStart="7dp"
                     android:layout_toEndOf="@+id/imagePin"
                     android:text="succes"
-                    android:textColor="#599344"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tvNamaGunung"
+                    android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
@@ -83,18 +83,18 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_type"
-                    android:layout_width="134dp"
+                    android:id="@+id/rv_types"
+                    android:layout_width="match_parent"
                     android:layout_height="37dp"
-                    android:layout_below="@+id/tvNamaGunung"
-                    android:isScrollContainer="false"
+                    android:layout_below="@+id/tv_name"
+                    android:isScrollContainer="true"
                     android:orientation="horizontal" />
 
                 <TextView
-                    android:id="@+id/tvDeskripsi"
+                    android:id="@+id/tv_description_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/rv_type"
+                    android:layout_below="@id/rv_types"
                     android:layout_marginTop="10dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -102,19 +102,19 @@
                     android:text="Deskripsi"/>
 
                 <TextView
-                    android:id="@+id/tvLink"
+                    android:id="@+id/tv_description_source"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvDeskripsi"
+                    android:layout_below="@+id/tv_description_title"
                     android:text="Link"
                     android:textColor="#969696"
                     android:textSize="10dp"/>
 
                 <TextView
-                    android:id="@+id/txDeskripsi"
+                    android:id="@+id/tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvLink"
+                    android:layout_below="@id/tv_description_source"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:textSize="12dp"/>
@@ -137,15 +137,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Perawatan"
+                        android:text="Cara Tanam"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_how_to_plant_source"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="View source"
+                        android:text="Lihat sumber"
                         android:gravity="right"
                         android:textColor="@color/green"
                         android:textSize="12dp" />
@@ -153,7 +154,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/txTanam"
+                    android:id="@+id/tv_how_to_plant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -184,6 +185,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_plant_care_source"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="View source"
@@ -194,12 +196,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/txPerawatan"
+                    android:id="@+id/tv_plant_care"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
