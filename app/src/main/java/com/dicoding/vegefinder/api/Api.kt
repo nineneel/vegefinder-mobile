@@ -5,10 +5,12 @@ import com.dicoding.vegefinder.SessionManager
 import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.data.model.VegetableType
 import com.dicoding.vegefinder.data.request.LoginRequest
+import com.dicoding.vegefinder.data.request.PredictRequest
 import com.dicoding.vegefinder.data.request.RegisterRequest
-import com.dicoding.vegefinder.data.response.VegetableTypeResponse
 import com.dicoding.vegefinder.data.response.LoginResponse
+import com.dicoding.vegefinder.data.response.PredictResponse
 import com.dicoding.vegefinder.data.response.RegisterResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,5 +35,13 @@ interface Api {
     fun getAllVegetable(
         @Header("Authorization") token : String = "Bearer ${SessionManager.userToken}"
     ): Call<ArrayList<Vegetable>>
+
+    @Multipart
+    @POST("predict")
+    @Headers("X-Requested-With: XMLHttpRequest")
+    fun getPredict(
+        @Header("Authorization") token: String = "Bearer ${SessionManager.userToken}",
+        @Part image: MultipartBody.Part,
+    ): Call<PredictResponse>
 
 }
