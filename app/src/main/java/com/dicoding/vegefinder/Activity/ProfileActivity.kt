@@ -11,15 +11,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import com.dicoding.vegefinder.LoginActivity
 import com.dicoding.vegefinder.MainActivity
 import com.dicoding.vegefinder.R
+import com.dicoding.vegefinder.SessionManager
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var modeSwitch: SwitchCompat
+    private lateinit var sessionManager: SessionManager
     private var nightMode:Boolean=false
     private var editor: SharedPreferences.Editor?=null
     private var sharedPreferences:SharedPreferences?=null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +33,7 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Profile"
 
+        sessionManager = SessionManager(this)
 
         val savedTextView: TextView = findViewById(R.id.tv_saved)
         val historyTextView: TextView = findViewById(R.id.tv_history)
@@ -36,6 +42,7 @@ class ProfileActivity : AppCompatActivity() {
         val instagramButton: ImageButton = findViewById(R.id.ib_instagram)
         val linkedinButton: ImageButton = findViewById(R.id.ib_linkedin)
         val websiteButton: ImageButton = findViewById(R.id.ib_website)
+        val logOutButton: TextView = findViewById(R.id.tv_logout)
 
 
 
@@ -94,6 +101,10 @@ class ProfileActivity : AppCompatActivity() {
             editor?.apply()
         }
 
+        logOutButton.setOnClickListener{
+            sessionManager.clearSession()
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
     }
 
 

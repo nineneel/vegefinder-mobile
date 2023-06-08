@@ -16,7 +16,7 @@ class HistoryAdapter (private val historyList: List<History>, private val contex
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_historyall, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_history, parent, false)
         return ViewHolder(view)
     }
 
@@ -31,7 +31,7 @@ class HistoryAdapter (private val historyList: List<History>, private val contex
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
         private val imageView: ImageView = itemView.findViewById(R.id.hty_image)
-        private val typeTextView: TextView = itemView.findViewById(R.id.hty_type)
+//        private val typeTextView: TextView = itemView.findViewById(R.id.hty_type)
         private val nameTextView: TextView = itemView.findViewById(R.id.hty_name)
 
         init {
@@ -40,17 +40,17 @@ class HistoryAdapter (private val historyList: List<History>, private val contex
 
         fun bind(item: History) {
             imageView.setImageResource(item.image)
-            typeTextView.text = item.type
+//            typeTextView.text = item.type
             nameTextView.text = item.name
         }
 
         override fun onClick(view: View) {
             val intent = Intent(context, DetailHistoryActivity::class.java)
             intent.putExtra("image", historyList[adapterPosition].image)
-            intent.putExtra("type", historyList[adapterPosition].type)
+//            intent.putExtra("type", historyList[adapterPosition].type)
             intent.putExtra("name", historyList[adapterPosition].name)
 
-            context.startActivity(intent)
+//            context.startActivity(intent)
         }
     }
 }
