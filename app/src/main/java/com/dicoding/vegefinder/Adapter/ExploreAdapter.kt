@@ -1,5 +1,6 @@
 package com.dicoding.vegefinder.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,6 +21,7 @@ class ExploreAdapter (private val context: Context) :  RecyclerView.Adapter<Expl
 
     private val vegetableList = ArrayList<Vegetable>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setVegetableList(vegetables: ArrayList<Vegetable>){
         vegetableList.clear()
         vegetableList.addAll(vegetables)
@@ -55,7 +57,7 @@ class ExploreAdapter (private val context: Context) :  RecyclerView.Adapter<Expl
                 .asBitmap()
                 .load("https://storage.googleapis.com/vegefinder-bucket/${item.thumbnail}")
                 .centerCrop()
-                .placeholder(R.drawable.kangkung)
+                .placeholder(R.drawable.vegefinder)
                 .into(imageView)
 
             nameTextView.text = item.name
@@ -64,6 +66,8 @@ class ExploreAdapter (private val context: Context) :  RecyclerView.Adapter<Expl
 
         override fun onClick(view: View) {
             val intent = Intent(context, DetailExploreActivity::class.java)
+            
+            intent.putExtra("id", vegetableList[adapterPosition].id)
             intent.putExtra("name", vegetableList[adapterPosition].name)
             intent.putExtra("typesName", vegetableList[adapterPosition].types.map { it.name } as ArrayList<String>)
             intent.putExtra("typesGroupsName", vegetableList[adapterPosition].types.map { it.typeGroups.id } as ArrayList<Int>)
@@ -77,6 +81,8 @@ class ExploreAdapter (private val context: Context) :  RecyclerView.Adapter<Expl
             intent.putExtra("plantCareSource", vegetableList[adapterPosition].plantCareSource)
             intent.putExtra("plantDisease", vegetableList[adapterPosition].plantDisease)
             intent.putExtra("plantDiseaseSource", vegetableList[adapterPosition].plantDiseaseSource)
+            intent.putExtra("isSaved", vegetableList[adapterPosition].isSaved)
+
 
             context.startActivity(intent)
         }

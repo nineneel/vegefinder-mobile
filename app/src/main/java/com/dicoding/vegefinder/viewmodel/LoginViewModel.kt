@@ -43,6 +43,7 @@ class LoginViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    loginResponse.postValue(null)
                     Log.v("Failure", "testt ->> " + t.message.toString())
                 }
             })

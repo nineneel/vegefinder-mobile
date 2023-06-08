@@ -22,29 +22,24 @@
         android:paddingStart="10dp"
         app:navigationIcon="@drawable/ic_back" />
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:background="@drawable/bg_half_rounded">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:background="@drawable/bg_half_rounded">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="32dp">
-
-                <View
-                    android:layout_width="35dp"
-                    android:layout_height="5dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_shape" />
-
-            </RelativeLayout>
+            <View
+                android:layout_width="35dp"
+                android:layout_height="5dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_shape" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -58,26 +53,27 @@
                     android:id="@+id/imagePin"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginTop="3dp"
-
+                    android:layout_marginTop="24dp"
                     android:src="@drawable/ic_check" />
 
 
                 <TextView
-                    android:id="@+id/tvLokasiGunung"
+                    android:id="@+id/tvSucces"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:layout_marginStart="7dp"
                     android:layout_toEndOf="@+id/imagePin"
                     android:text="succes"
+                    android:textColor="@color/green"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_below="@id/tvSucces"
                     android:text="adada"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
@@ -120,149 +116,149 @@
                     android:textColor="@color/black"
                     android:textSize="12dp"/>
 
+                <LinearLayout
+                    android:id="@+id/ll_desc1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/tv_description"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cara Tanam"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_how_to_plant_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Lihat sumber"
+                            android:gravity="right"
+                            android:textColor="@color/green"
+                            android:textSize="12dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_how_to_plant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_desc2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/ll_desc1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Perawatan"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_plant_care_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="View source"
+                            android:gravity="right"
+                            android:textColor="@color/green"
+                            android:textSize="12dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_plant_care"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/ll_desc2"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Penyakit"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_plant_disease_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="View source"
+                            android:gravity="right"
+                            android:textColor="@color/green"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_plant_disease"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20sp"
-                android:orientation="vertical">
+        </FrameLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cara Tanam"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_how_to_plant_source"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lihat sumber"
-                        android:gravity="right"
-                        android:textColor="@color/green"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_how_to_plant"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20sp"
-                android:layout_marginEnd="20sp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Perawatan"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_plant_care_source"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lihat sumber"
-                        android:gravity="right"
-                        android:textColor="@color/green"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_plant_care"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20sp"
-                android:layout_marginEnd="20sp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Penyakit"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tv_plant_disease_source"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lihat sumber"
-                        android:gravity="right"
-                        android:textColor="@color/green"
-                        android:textSize="12dp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_plant_disease"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/btn_saved"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="@drawable/button_scan"
-                    android:drawableLeft="@drawable/ic_saved"
-                    android:text="Save this vegetable"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    <Button
+        android:id="@+id/btn_saved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="300dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/button_scan"
+        android:drawableLeft="@drawable/ic_saved"
+        android:text="Save this vegetable"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

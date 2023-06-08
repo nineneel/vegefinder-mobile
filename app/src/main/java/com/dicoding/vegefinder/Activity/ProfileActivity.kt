@@ -7,23 +7,31 @@ import android.view.MenuItem
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProvider
 import com.dicoding.vegefinder.LoginActivity
 import com.dicoding.vegefinder.MainActivity
 import com.dicoding.vegefinder.R
 import com.dicoding.vegefinder.SessionManager
+import com.dicoding.vegefinder.viewmodel.LogoutViewModel
+import com.dicoding.vegefinder.viewmodel.UserViewModel
+import com.dicoding.vegefinder.viewmodel.VegetableViewModel
+import kotlin.system.exitProcess
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var modeSwitch: SwitchCompat
     private lateinit var sessionManager: SessionManager
-    private var nightMode:Boolean=false
-    private var editor: SharedPreferences.Editor?=null
-    private var sharedPreferences:SharedPreferences?=null
-
+    private lateinit var logoutViewModel: LogoutViewModel
+    private lateinit var userViewModel: UserViewModel
+    private var nightMode: Boolean = false
+    private var editor: SharedPreferences.Editor? = null
+    private var sharedPreferences: SharedPreferences? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +43,19 @@ class ProfileActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
+        userViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[UserViewModel::class.java]
+
+        logoutViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[LogoutViewModel::class.java]
+
+
+        val nameTextView: TextView = findViewById(R.id.tv_name)
+        val emailTextView: TextView = findViewById(R.id.tv_email)
         val savedTextView: TextView = findViewById(R.id.tv_saved)
         val historyTextView: TextView = findViewById(R.id.tv_history)
         val themeTextView: TextView = findViewById(R.id.tv_theme)
@@ -44,7 +65,19 @@ class ProfileActivity : AppCompatActivity() {
         val websiteButton: ImageButton = findViewById(R.id.ib_website)
         val logOutButton: TextView = findViewById(R.id.tv_logout)
 
+//        val currentUser = sessionManager.getUser()
+//        Log.d("EXPLORE TEXT", "Vegetable List: $currentUser")
 
+//        if(currentUser != null){
+        userViewModel.setUser()
+        userViewModel.getUserResponse().observe(this) { user ->
+            if (user != null) {
+                nameTextView.text = user.name
+                emailTextView.text = user.email
+//                sessionManager.saveUser(user)
+            }
+//            }
+        }
 
         savedTextView.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -65,7 +98,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         instagramButton.setOnClickListener {
-            val instagramIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/"))
+            val instagramIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/"))
             startActivity(instagramIntent)
         }
 
@@ -75,7 +109,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         websiteButton.setOnClickListener {
-            val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bilibili.tv/id/anime"))
+            val websiteIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bilibili.tv/id/anime"))
             startActivity(websiteIntent)
         }
 
@@ -83,27 +118,35 @@ class ProfileActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("MODE", MODE_PRIVATE)
         nightMode = sharedPreferences?.getBoolean("night", false)!!
 
-        if (nightMode){
+        if (nightMode) {
             modeSwitch.isChecked = true
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
 
         modeSwitch.setOnCheckedChangeListener { _, _ ->
-            if(nightMode){
+            if (nightMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 editor = sharedPreferences?.edit()
                 editor?.putBoolean("night", false)
-            }else{
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 editor = sharedPreferences?.edit()
-                editor?.putBoolean("night",true)
+                editor?.putBoolean("night", true)
             }
             editor?.apply()
         }
 
-        logOutButton.setOnClickListener{
-            sessionManager.clearSession()
-            startActivity(Intent(this, LoginActivity::class.java))
+        logOutButton.setOnClickListener {
+            logoutViewModel.logout()
+            logoutViewModel.getLogoutResponse().observe(this) { response ->
+                if (response != null) {
+                    Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+                    sessionManager.clearSession()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finishAffinity()
+                }
+            }
+
         }
     }
 

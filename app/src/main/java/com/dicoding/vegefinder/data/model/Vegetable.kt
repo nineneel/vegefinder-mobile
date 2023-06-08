@@ -37,5 +37,7 @@ data class Vegetable(
         @SerializedName("updated_at")
         val updatedAt: String,
         @SerializedName("types")
-        val types: ArrayList<VegetableType>
+        val types: ArrayList<VegetableType>,
+        @SerializedName("is_saved")
+        val isSaved: Boolean
 )

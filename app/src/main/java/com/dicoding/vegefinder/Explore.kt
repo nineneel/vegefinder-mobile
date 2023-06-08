@@ -1,5 +1,6 @@
 package com.dicoding.vegefinder
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,20 +11,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.ExploreAdapter
-import com.dicoding.vegefinder.data.model.Vegetable
-import com.dicoding.vegefinder.viewmodel.VegetableTypeViewModel
 import com.dicoding.vegefinder.viewmodel.VegetableViewModel
 
 class Explore : Fragment() {
 
     private lateinit var exploreAdapter: ExploreAdapter
     private lateinit var vegetableViewModel: VegetableViewModel
+    private lateinit var sessionManager: SessionManager
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val exploreView = inflater.inflate(R.layout.fragment_explore, container, false)
+
+        sessionManager = SessionManager(requireContext())
 
         exploreAdapter = ExploreAdapter(requireContext())
         exploreAdapter.notifyDataSetChanged()
@@ -32,12 +35,26 @@ class Explore : Fragment() {
         recyclerViewExplore.layoutManager = GridLayoutManager(requireActivity(), 2)
         recyclerViewExplore.adapter = exploreAdapter
 
-        vegetableViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[VegetableViewModel::class.java]
+        val vegetableList = sessionManager.getVegetableList()
 
-        vegetableViewModel.setVegetable()
-        vegetableViewModel.getVegetableResponse().observe(viewLifecycleOwner){vegetableList ->
-            exploreAdapter.setVegetableList(vegetableList)
+        if (vegetableList != null) {
+            if (vegetableList.size > 0) {
+                exploreAdapter.setVegetableList(vegetableList)
+                Log.d("EXPLORE TEXT", "Vegetable List: $vegetableList")
+            } else {
+                vegetableViewModel = ViewModelProvider(
+                    this,
+                    ViewModelProvider.NewInstanceFactory()
+                )[VegetableViewModel::class.java]
+
+                vegetableViewModel.setVegetable()
+                vegetableViewModel.getVegetableResponse().observe(viewLifecycleOwner) { response ->
+                    exploreAdapter.setVegetableList(response)
+                    sessionManager.saveVegetableList(response)
+                }
+            }
         }
+
 
 
         return exploreView

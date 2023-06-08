@@ -10,36 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Activity.HistoryActivity
-import com.dicoding.vegefinder.Adapter.History
 import com.dicoding.vegefinder.Adapter.HistoryAdapter
 import com.dicoding.vegefinder.Adapter.VegetableTypeAdapter
-import com.dicoding.vegefinder.viewmodel.VegetableTypeViewModel
+import com.dicoding.vegefinder.viewmodel.HomeHistoryViewModel
+import com.dicoding.vegefinder.viewmodel.HomeTypeViewModel
 
 class Home : Fragment() {
 
-    private val historyList = listOf(
-        History(
-            R.drawable.kangkung,
-            "Bayam",
-            "Daun",
-            "Nnanananan"
-        ),
-        History(
-            R.drawable.bayam,
-            "Bayam Hijau",
-            "Daun",
-            "Nnanananan"
-        )
-
-    )
-
-    private lateinit var viewTextView: TextView
-    private lateinit var vegetableTypeViewModel: VegetableTypeViewModel
+    private lateinit var historyViewAllTextView: TextView
+    private lateinit var homeTypeViewModel: HomeTypeViewModel
+    private lateinit var homeHistoryViewModel: HomeHistoryViewModel
+    private lateinit var historyAdapter: HistoryAdapter
     private lateinit var vegetableTypeAdapter: VegetableTypeAdapter
+    private lateinit var sessionManager: SessionManager
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -55,29 +44,59 @@ class Home : Fragment() {
             startActivity(i)
         }
 
-
-        val recyclerViewHistory = view.findViewById<RecyclerView>(R.id.rv_history)
-        recyclerViewHistory.layoutManager = GridLayoutManager(requireContext(),2)
-        recyclerViewHistory.adapter = HistoryAdapter(historyList, requireContext())
-
+        sessionManager = SessionManager(requireContext())
 
         vegetableTypeAdapter = VegetableTypeAdapter(requireContext())
         vegetableTypeAdapter.notifyDataSetChanged()
 
-        val recyclerViewJenis = view.findViewById<RecyclerView>(R.id.rv_jenis)
-        recyclerViewJenis.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerViewJenis.adapter = vegetableTypeAdapter
+        historyAdapter = HistoryAdapter(requireContext())
+        historyAdapter.notifyDataSetChanged()
 
-        vegetableTypeViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[VegetableTypeViewModel::class.java]
+        val recyclerViewHistories = view.findViewById<RecyclerView>(R.id.rv_history)
+        recyclerViewHistories.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerViewHistories.adapter = historyAdapter
 
-        vegetableTypeViewModel.setVegetableType()
-        vegetableTypeViewModel.getVegetableTypeResponse().observe(viewLifecycleOwner){ listJenis ->
-            vegetableTypeAdapter.setList(listJenis)
+
+        val recyclerViewType = view.findViewById<RecyclerView>(R.id.rv_jenis)
+        recyclerViewType.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerViewType.adapter = vegetableTypeAdapter
+
+        homeTypeViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[HomeTypeViewModel::class.java]
+        homeHistoryViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[HomeHistoryViewModel::class.java]
+
+
+        val vegetableTypeList = sessionManager.getVegetableTypeList()
+
+        if (vegetableTypeList.size > 0) {
+            Log.d("EXPLORE TEXT", "Vegetable List: $vegetableTypeList")
+            vegetableTypeAdapter.setList(vegetableTypeList)
+        } else {
+
+            homeTypeViewModel.setVegetableType()
+            homeTypeViewModel.getVegetableTypeResponse().observe(viewLifecycleOwner) { response ->
+                vegetableTypeAdapter.setList(response)
+                sessionManager.saveVegetableTypeList(response)
+            }
         }
 
 
-        viewTextView = view.findViewById(R.id.view_all)
-        viewTextView.setOnClickListener {
+        homeHistoryViewModel.setHistory()
+        homeHistoryViewModel.getHistoryResponse().observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                historyAdapter.setVegetableList(response)
+            } else {
+                Log.d("HOME", "Home histories null")
+            }
+        }
+
+        historyViewAllTextView = view.findViewById(R.id.view_all)
+        historyViewAllTextView.setOnClickListener {
             val intent = Intent(requireContext(), HistoryActivity::class.java)
             startActivity(intent)
         }

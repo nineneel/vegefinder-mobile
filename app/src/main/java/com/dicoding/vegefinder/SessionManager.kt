@@ -2,9 +2,13 @@ package com.dicoding.vegefinder
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.dicoding.vegefinder.data.model.User
+import com.dicoding.vegefinder.data.model.Vegetable
+import com.dicoding.vegefinder.data.model.VegetableType
 
 class SessionManager(context: Context) {
     private var prefs: SharedPreferences = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE)
+    private var tinyDB: TinyDB = TinyDB(context)
 
     companion object {
         const val KEY_TOKEN = "token"
@@ -12,11 +16,34 @@ class SessionManager(context: Context) {
         var userToken : String? = null
     }
 
+    fun saveUser(user: User){
+        tinyDB.putObject("user", User::class.java)
+    }
+
+    fun getUser(): User{
+        return tinyDB.getObject("user", User::class.java)
+    }
+
+    fun saveVegetableList(vegetableList: ArrayList<Vegetable>){
+        tinyDB.putListVegetable("vegetableList",  vegetableList)
+    }
+
+    fun getVegetableList(): ArrayList<Vegetable>? {
+        return tinyDB.getVegetableList("vegetableList")
+    }
+
+    fun saveVegetableTypeList(vegetableTypeList: ArrayList<VegetableType>){
+        tinyDB.putListTypeVegetable("vegetableTypeList", vegetableTypeList)
+    }
+
+    fun getVegetableTypeList(): ArrayList<VegetableType>{
+        return tinyDB.getVegetableTypeList("vegetableTypeList")
+    }
+
     fun saveAuthToken(token: String?) {
         val editor = prefs.edit()
         editor.putString(KEY_TOKEN, token)
         editor.apply()
-
         userToken = token
     }
 
@@ -36,6 +63,9 @@ class SessionManager(context: Context) {
     }
 
     fun clearSession() {
+        tinyDB.remove("user")
+        tinyDB.remove("vegetableList")
+        tinyDB.remove("vegetableTypeList")
         val editor = prefs.edit()
         editor.clear()
         editor.apply()

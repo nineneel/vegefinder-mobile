@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +21,20 @@ import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Adapter.TypeTagAdapter
 import com.dicoding.vegefinder.R
 import com.dicoding.vegefinder.data.model.Vegetable
+import com.dicoding.vegefinder.getScreenHeight
+import com.dicoding.vegefinder.getScreenWidth
+import com.dicoding.vegefinder.viewmodel.SaveVegetableViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.w3c.dom.Text
 
 class DetailExploreActivity : AppCompatActivity() {
+
+    private lateinit var saveVegetableViewModel: SaveVegetableViewModel
+
+    private var isSavedVegetable: Boolean = false
+    private var isProccess: Boolean = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailexplore)
@@ -31,7 +46,19 @@ class DetailExploreActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        val bottom_sheet = findViewById<FrameLayout>(R.id.bottom_sheet)
 
+        BottomSheetBehavior.from(bottom_sheet).apply {
+            peekHeight = getScreenHeight() - 620
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        saveVegetableViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[SaveVegetableViewModel::class.java]
+
+        val id = intent.getIntExtra("id", 0)
         val name = intent.getStringExtra("name")
         val typesName = intent.getStringArrayListExtra("typesName")
         val typesGroupName = intent.getIntegerArrayListExtra("typesGroupsName")
@@ -45,6 +72,8 @@ class DetailExploreActivity : AppCompatActivity() {
         val plantCareSource = intent.getStringExtra("plantCareSource")
         val plantDisease = intent.getStringExtra("plantDisease")
         val plantDiseaseSource = intent.getStringExtra("plantDiseaseSource")
+        val isSaved = intent.getBooleanExtra("isSaved", false)
+
 
         val nameTextView = findViewById<TextView>(R.id.tv_name)
         val recyclerViewType = findViewById<RecyclerView>(R.id.rv_types)
@@ -57,14 +86,21 @@ class DetailExploreActivity : AppCompatActivity() {
         val plantCareTextViewSource = findViewById<TextView>(R.id.tv_plant_care_source)
         val plantDiseaseTextView = findViewById<TextView>(R.id.tv_plant_disease)
         val plantDiseaseTextViewSource = findViewById<TextView>(R.id.tv_plant_disease_source)
+        val saveButton = findViewById<Button>(R.id.btn_saved)
 
-//        Log.d("DEBUG", "TEST TYPE ${thumbnail}")
+        isSavedVegetable = isSaved
+        activeToogleSaveButton(saveButton)
 
-        recyclerViewType.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewType.adapter = typesName?.let { typesGroupName?.let { it1 ->
-            TypeTagAdapter(it,
-                it1, this)
-        } }
+        recyclerViewType.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewType.adapter = typesName?.let {
+            typesGroupName?.let { it1 ->
+                TypeTagAdapter(
+                    it,
+                    it1, this
+                )
+            }
+        }
 
         Glide.with(thumbnailImageView)
             .asBitmap()
@@ -76,21 +112,55 @@ class DetailExploreActivity : AppCompatActivity() {
         descriptionTextView.text = description
         descriptionSourceTextView.text = descriptionSource
         howToPlantTextView.text = howToPlant
-        howToPlantTextViewSource.setOnClickListener{
+        howToPlantTextViewSource.setOnClickListener {
             val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse(howToPlantSource))
             startActivity(websiteIntent)
         }
         plantCareTextView.text = plantCare
-        plantCareTextViewSource.setOnClickListener{
+        plantCareTextViewSource.setOnClickListener {
             val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse(plantCareSource))
             startActivity(websiteIntent)
         }
         plantDiseaseTextView.text = plantDisease
-        plantDiseaseTextViewSource.setOnClickListener{
+        plantDiseaseTextViewSource.setOnClickListener {
             val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse(plantDiseaseSource))
             startActivity(websiteIntent)
         }
+
+        saveButton.setOnClickListener {
+            if (!isProccess) {
+                isProccess = true
+                saveVegetableViewModel.setSaveVegetable(id = id)
+                saveVegetableViewModel.getSaveVegetableResponse().observe(this) { response ->
+                    if (response != null) {
+                        if (isSavedVegetable) {
+                            isSavedVegetable = false
+                            activeToogleSaveButton(saveButton)
+                        } else {
+                            isSavedVegetable = true
+                            activeToogleSaveButton(saveButton)
+                        }
+                        isProccess = false
+                    } else {
+                        Log.d("TEST EXPLORE", "Test save vegetable null")
+                    }
+                }
+            }
+
+        }
     }
+
+    private fun activeToogleSaveButton(saveButton: Button) {
+        if (isSavedVegetable) {
+            saveButton.text = "Unsave This Vegetable"
+            saveButton.background =
+                ContextCompat.getDrawable(this, R.drawable.button_saved_deactive)
+        } else {
+            saveButton.text = "Save This Vegetable"
+            saveButton.background = ContextCompat.getDrawable(this, R.drawable.button_scan)
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {

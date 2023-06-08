@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.data.request.LoginRequest
 import com.dicoding.vegefinder.databinding.ActivityLoginBinding
 import com.dicoding.vegefinder.viewmodel.LoginViewModel
@@ -42,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
         if (sessionManager.isLoggedIn()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish()
+            finishAffinity()
         }
 
         etEmail = findViewById(R.id.et_email)
@@ -74,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
             showLoading(true)
             loginViewModel.login(data)
-            loginViewModel.getLoginResponse().observe(this) {response ->
+            loginViewModel.getLoginResponse().observe(this) { response ->
                 if (response != null) {
 
                     if (response.status == "success") {
@@ -84,25 +85,25 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
-                    }else{
+                    } else {
                         val status = response.status
                         val errorMessage = response.message
 
-                        if(status == "failed"){
+                        if (status == "failed") {
                             etEmail.error = errorMessage
                             etEmail.requestFocus()
                             return@observe
-                        }else{
+                        } else {
                             val emailError = response.errors?.email?.getOrNull(0)
                             val passwordError = response.errors?.password?.getOrNull(0)
 
-                            if(emailError != null){
+                            if (emailError != null) {
                                 etEmail.error = emailError
                                 etEmail.requestFocus()
                                 return@observe
                             }
 
-                            if(passwordError != null){
+                            if (passwordError != null) {
                                 etPassword.error = passwordError
                                 etPassword.requestFocus()
                                 return@observe
