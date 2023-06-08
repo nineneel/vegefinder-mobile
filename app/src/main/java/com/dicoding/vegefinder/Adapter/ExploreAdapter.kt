@@ -65,15 +65,18 @@ class ExploreAdapter (private val context: Context) :  RecyclerView.Adapter<Expl
         override fun onClick(view: View) {
             val intent = Intent(context, DetailExploreActivity::class.java)
             intent.putExtra("name", vegetableList[adapterPosition].name)
-            intent.putExtra("types", vegetableList[adapterPosition].types.map { it.name } as ArrayList<String>)
+            intent.putExtra("typesName", vegetableList[adapterPosition].types.map { it.name } as ArrayList<String>)
+            intent.putExtra("typesGroupsName", vegetableList[adapterPosition].types.map { it.typeGroups.id } as ArrayList<Int>)
             intent.putExtra("description", vegetableList[adapterPosition].description)
             intent.putExtra("descriptionSource", vegetableList[adapterPosition].descriptionSource)
             intent.putExtra("thumbnail", vegetableList[adapterPosition].thumbnail)
+            intent.putExtra("images", vegetableList[adapterPosition].images)
             intent.putExtra("howToPlant", vegetableList[adapterPosition].howToPlant)
             intent.putExtra("howToPlantSource", vegetableList[adapterPosition].howToPlantSource)
             intent.putExtra("plantCare", vegetableList[adapterPosition].plantCare)
             intent.putExtra("plantCareSource", vegetableList[adapterPosition].plantCareSource)
-
+            intent.putExtra("plantDisease", vegetableList[adapterPosition].plantDisease)
+            intent.putExtra("plantDiseaseSource", vegetableList[adapterPosition].plantDiseaseSource)
 
             context.startActivity(intent)
         }

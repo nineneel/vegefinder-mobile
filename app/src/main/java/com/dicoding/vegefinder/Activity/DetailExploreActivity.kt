@@ -33,7 +33,9 @@ class DetailExploreActivity : AppCompatActivity() {
 
 
         val name = intent.getStringExtra("name")
-        val types = intent.getStringArrayListExtra("types")
+        val typesName = intent.getStringArrayListExtra("typesName")
+        val typesGroupName = intent.getIntegerArrayListExtra("typesGroupsName")
+        val images = intent.getStringArrayListExtra("images")
         val description = intent.getStringExtra("description")
         val descriptionSource = intent.getStringExtra("descriptionSource")
         val thumbnail = intent.getStringExtra("thumbnail")
@@ -41,6 +43,8 @@ class DetailExploreActivity : AppCompatActivity() {
         val howToPlantSource = intent.getStringExtra("howToPlantSource")
         val plantCare = intent.getStringExtra("plantCare")
         val plantCareSource = intent.getStringExtra("plantCareSource")
+        val plantDisease = intent.getStringExtra("plantDisease")
+        val plantDiseaseSource = intent.getStringExtra("plantDiseaseSource")
 
         val nameTextView = findViewById<TextView>(R.id.tv_name)
         val recyclerViewType = findViewById<RecyclerView>(R.id.rv_types)
@@ -51,11 +55,16 @@ class DetailExploreActivity : AppCompatActivity() {
         val howToPlantTextViewSource = findViewById<TextView>(R.id.tv_how_to_plant_source)
         val plantCareTextView = findViewById<TextView>(R.id.tv_plant_care)
         val plantCareTextViewSource = findViewById<TextView>(R.id.tv_plant_care_source)
+        val plantDiseaseTextView = findViewById<TextView>(R.id.tv_plant_disease)
+        val plantDiseaseTextViewSource = findViewById<TextView>(R.id.tv_plant_disease_source)
 
-//        Log.d("DEBUG", "TEST TYPE $types")
+//        Log.d("DEBUG", "TEST TYPE ${thumbnail}")
 
         recyclerViewType.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewType.adapter = types?.let { TypeTagAdapter(it, this) }
+        recyclerViewType.adapter = typesName?.let { typesGroupName?.let { it1 ->
+            TypeTagAdapter(it,
+                it1, this)
+        } }
 
         Glide.with(thumbnailImageView)
             .asBitmap()
@@ -74,6 +83,11 @@ class DetailExploreActivity : AppCompatActivity() {
         plantCareTextView.text = plantCare
         plantCareTextViewSource.setOnClickListener{
             val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse(plantCareSource))
+            startActivity(websiteIntent)
+        }
+        plantDiseaseTextView.text = plantDisease
+        plantDiseaseTextViewSource.setOnClickListener{
+            val websiteIntent = Intent(Intent.ACTION_VIEW, Uri.parse(plantDiseaseSource))
             startActivity(websiteIntent)
         }
     }
