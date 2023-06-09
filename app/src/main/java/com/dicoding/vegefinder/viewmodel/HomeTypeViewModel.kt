@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.vegefinder.api.RetrofitClient
 import com.dicoding.vegefinder.data.model.VegetableType
-import com.dicoding.vegefinder.data.response.VegetableTypeResponse
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Callback
 
-class VegetableTypeViewModel: ViewModel() {
+class HomeTypeViewModel: ViewModel() {
     val vegetableTypeResponse = MutableLiveData<ArrayList<VegetableType>>()
 
     fun setVegetableType(){

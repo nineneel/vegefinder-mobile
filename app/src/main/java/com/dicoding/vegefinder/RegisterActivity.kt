@@ -133,6 +133,7 @@ class RegisterActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.signIn)
         btnLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            finishAffinity()
         }
     }
 

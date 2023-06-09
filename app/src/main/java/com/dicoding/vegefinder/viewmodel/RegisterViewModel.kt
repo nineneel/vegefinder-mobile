@@ -39,7 +39,7 @@ class RegisterViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Log.v("Failure",  t.message.toString())
+                    registerResponse.postValue(null)
                 }
 
             })
