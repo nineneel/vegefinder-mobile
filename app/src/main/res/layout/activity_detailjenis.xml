@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout2"
             android:layout_width="match_parent"
@@ -18,7 +19,7 @@
                 android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="@color/white"
+                android:background="?attr/colorSecondary"
                 app:elevation="0dp">
 
 
@@ -43,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="100dp"
                         android:text="Jenis"
-                        android:textColor="@android:color/black"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 

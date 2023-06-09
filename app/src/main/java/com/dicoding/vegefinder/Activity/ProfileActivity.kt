@@ -144,6 +144,8 @@ class ProfileActivity : AppCompatActivity() {
                     sessionManager.clearSession()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finishAffinity()
+                }else{
+                    Toast.makeText(this, "logout error", Toast.LENGTH_SHORT).show()
                 }
             }
 
