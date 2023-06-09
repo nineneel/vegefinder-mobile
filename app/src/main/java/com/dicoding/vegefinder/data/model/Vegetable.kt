@@ -2,6 +2,7 @@ package com.dicoding.vegefinder.data.model
 
 import com.google.gson.annotations.SerializedName
 
+
 data class Vegetable(
         @SerializedName("id")
         val id: Int,
@@ -21,6 +22,8 @@ data class Vegetable(
         val descriptionSource: String,
         @SerializedName("how_to_plant")
         val howToPlant: String,
+        @SerializedName("how_to_plant_source")
+        val howToPlantSource: String,
         @SerializedName("plant_care")
         val plantCare: String,
         @SerializedName("plant_care_source")

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.ExploreAdapter
-import com.dicoding.vegefinder.Adapter.ExploreData
 import com.dicoding.vegefinder.Adapter.SavedAdapter
 import com.dicoding.vegefinder.Adapter.SavedData
 
