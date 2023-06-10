@@ -3,14 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="?attr/colorSecondary">
 
-    <ImageView
-        android:id="@+id/iv_thumbnail"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY" />
+        android:layout_height="match_parent">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/dots_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager">
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,8 +38,7 @@
         android:layout_marginStart="20sp"
         android:layout_marginTop="35dp"
         android:background="@drawable/bg_rounded"
-        android:paddingStart="10dp"
-        app:navigationIcon="@drawable/ic_back" />
+        app:navigationIcon="@drawable/ic_close" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -74,8 +92,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_below="@id/tvSucces"
-                    android:text="adada"
-                    android:textColor="@android:color/black"
+                    android:text="Name Vege"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -93,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rv_types"
                     android:layout_marginTop="10dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:text="Deskripsi"/>
@@ -113,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_description_source"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/black"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="12dp"/>
 
                 <LinearLayout
@@ -133,7 +151,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cara Tanam"
-                            android:textColor="@android:color/black"
+                            android:textColor="?android:textColorPrimary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -153,7 +171,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -175,7 +193,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Perawatan"
-                            android:textColor="@android:color/black"
+                            android:textColor="?android:textColorPrimary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -195,7 +213,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -216,7 +234,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Penyakit"
-                            android:textColor="@android:color/black"
+                            android:textColor="?android:textColorPrimary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -235,7 +253,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textColor="@android:color/black"
+                        android:textColor="?android:textColorPrimary"
                         android:textSize="14sp" />
 
                 </LinearLayout>

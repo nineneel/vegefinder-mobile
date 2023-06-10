@@ -5,18 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.VegeFinder"
+    android:background="?attr/colorSecondary"
     tools:context=".Activity.ProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="?attr/colorSecondary"
+                app:elevation="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        app:navigationIcon="@drawable/ic_back">
+
+
+                    </androidx.appcompat.widget.Toolbar>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:text="Profile"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
         <ImageView
             android:id="@+id/iv_profile"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="26dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="90dp"
             android:src="@drawable/tomato"
             android:contentDescription="profile_user"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,9 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:text="Name User"
             android:textSize="28dp"
+            android:textColor="?android:textColorPrimary"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/iv_profile"
             app:layout_constraintTop_toTopOf="@+id/iv_profile" />
@@ -39,7 +85,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:text="tomatomato@gmail.com"
             app:layout_constraintStart_toEndOf="@+id/iv_profile"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />

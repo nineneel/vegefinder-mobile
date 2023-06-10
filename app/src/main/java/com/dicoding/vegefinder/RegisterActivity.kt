@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -202,6 +203,13 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finishAffinity()
         }
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
+        assert(supportActionBar != null)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

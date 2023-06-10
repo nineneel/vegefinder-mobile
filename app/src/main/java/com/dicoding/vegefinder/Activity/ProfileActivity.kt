@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.LoginActivity
@@ -67,6 +68,13 @@ class ProfileActivity : AppCompatActivity() {
         val linkedinButton: ImageButton = findViewById(R.id.ib_linkedin)
         val websiteButton: ImageButton = findViewById(R.id.ib_website)
         val logOutButton: TextView = findViewById(R.id.tv_logout)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
+        assert(supportActionBar != null)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
 
         val currentUser: User? = sessionManager.getUser()
         Log.d("EXPLORE TEXT", "Vegetable List: $currentUser")

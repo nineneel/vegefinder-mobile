@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="?attr/colorSecondary">
 
     <include
         android:id="@+id/include2"
@@ -17,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/include2"/>
 
     <View
         android:id="@+id/outline_view"

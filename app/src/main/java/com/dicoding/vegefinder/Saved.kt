@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.ExploreAdapter
 import com.dicoding.vegefinder.Adapter.SavedAdapter
 import com.dicoding.vegefinder.Adapter.SavedData
+import com.dicoding.vegefinder.databinding.FragmentSavedBinding
 import com.dicoding.vegefinder.viewmodel.SavedViewModel
 import com.dicoding.vegefinder.viewmodel.VegetableViewModel
 
 class Saved : Fragment() {
+    private var _binding: FragmentSavedBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recyclerViewSaved: RecyclerView
     private lateinit var savedAdapter: SavedAdapter
     private lateinit var savedViewModel: SavedViewModel
@@ -35,15 +38,36 @@ class Saved : Fragment() {
         recyclerViewSaved.layoutManager = LinearLayoutManager(activity)
         recyclerViewSaved.adapter = savedAdapter
 
-        savedViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[SavedViewModel::class.java]
-
-        savedViewModel.setVegetable()
-        savedViewModel.getVegetableResponse().observe(viewLifecycleOwner){vegetableList ->
-            if(vegetableList != null){
-                savedAdapter.setVegetableList(vegetableList)
-            }
-        }
 
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentSavedBinding.bind(view)
+
+
+        savedAdapter.notifyDataSetChanged()
+
+        binding.apply {
+            rvSaved.setHasFixedSize(true)
+            rvSaved.layoutManager = LinearLayoutManager(activity)
+            rvSaved.adapter = savedAdapter
+        }
+        savedViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[SavedViewModel::class.java]
+        savedViewModel.setVegetable()
+        savedViewModel.getVegetableResponse().observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isEmpty()) {
+                    binding.tvNosaved.visibility = View.VISIBLE
+                    binding.rvSaved.visibility = View.GONE
+                } else {
+                    binding.tvNosaved.visibility = View.GONE
+                    binding.rvSaved.visibility = View.VISIBLE
+                    savedAdapter.setVegetableList(it)
+                }
+            }
+        }
+    }
+
 }

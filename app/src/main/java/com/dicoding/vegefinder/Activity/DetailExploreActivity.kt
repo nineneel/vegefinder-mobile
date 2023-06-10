@@ -16,8 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dicoding.vegefinder.Adapter.ImageSlideAdapter
 import com.dicoding.vegefinder.Adapter.TypeTagAdapter
 import com.dicoding.vegefinder.R
+import com.dicoding.vegefinder.data.model.Vegetable
+import com.dicoding.vegefinder.databinding.ActivityDetailexploreBinding
 import com.dicoding.vegefinder.getScreenHeight
 import com.dicoding.vegefinder.viewmodel.SaveVegetableViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -25,14 +28,24 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 class DetailExploreActivity : AppCompatActivity() {
 
     private lateinit var saveVegetableViewModel: SaveVegetableViewModel
-
+    private lateinit var binding: ActivityDetailexploreBinding
+    private lateinit var adapter: ImageSlideAdapter
+    private val list = ArrayList<Vegetable>()
+    private lateinit var dots: ArrayList<TextView>
     private var isSavedVegetable: Boolean = false
     private var isProccess: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detailexplore)
+        binding = ActivityDetailexploreBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        list.add(
+            Vegetable(
+                "https://storage.googleapis.com/vegefinder-bucket/"
+            )
+        )
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
 

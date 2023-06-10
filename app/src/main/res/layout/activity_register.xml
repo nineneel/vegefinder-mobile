@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary">
 
-    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".RegisterActivity">
@@ -13,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <ProgressBar
                 android:id="@+id/progress_bar"
@@ -29,13 +30,27 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:background="#599344"
-                android:gravity="center">
+                android:background="#599344">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    app:navigationIcon="@drawable/ic_close_w" />
 
                 <ImageView
                     android:layout_width="112dp"
                     android:layout_height="112dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="148dp"
+                    android:layout_marginEnd="151dp"
+                    android:layout_marginBottom="31dp"
                     android:src="@drawable/logo" />
+
             </RelativeLayout>
 
             <ImageView
@@ -61,7 +76,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:text="Create Account"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -70,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:text="Please register below"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="10dp"
                 android:textStyle="bold" />
 
@@ -85,10 +100,11 @@
                 android:drawableLeft="@drawable/ic_person"
                 android:drawablePadding="15dp"
                 android:hint="Name"
+                android:inputType="textPersonName"
                 android:padding="10dp"
                 android:textColorHint="#969696"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/register_email"
@@ -101,10 +117,11 @@
                 android:drawableLeft="@drawable/ic_email"
                 android:drawablePadding="15dp"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/register_password"
@@ -121,7 +138,7 @@
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/valid_password"
@@ -138,7 +155,7 @@
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,6 +170,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
@@ -233,7 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have account?"
-                    android:textColor="@color/black"
+                    android:textColor="?android:textColorPrimary"
                     android:textStyle="bold" />
 
                 <TextView

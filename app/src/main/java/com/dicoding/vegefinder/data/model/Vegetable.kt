@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Vegetable(
+        @SerializedName("thumbnail")
+        val thumbnail: String,
         @SerializedName("id")
         val id: Int,
         @SerializedName("class_name")
@@ -12,8 +14,6 @@ data class Vegetable(
         val name: String,
         @SerializedName("other_name")
         val otherName: String,
-        @SerializedName("thumbnail")
-        val thumbnail: String,
         @SerializedName("images")
         val images: ArrayList<String>,
         @SerializedName("description")

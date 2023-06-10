@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
     tools:context=".Activity.HistoryActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -35,8 +36,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="100dp"
-                    android:text="Jenis"
+                    android:layout_marginStart="80dp"
+                    android:text="History"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -47,14 +48,30 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hty_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_margin="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:isScrollContainer="false"
             tools:listitem="@layout/item_historyall" />
 
+        <TextView
+            android:id="@+id/tv_nohistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:text="History Kosong"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </LinearLayout>>
 
 </RelativeLayout>
