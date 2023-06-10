@@ -9,15 +9,18 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.LoginActivity
 import com.dicoding.vegefinder.MainActivity
 import com.dicoding.vegefinder.R
 import com.dicoding.vegefinder.SessionManager
+import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.viewmodel.LogoutViewModel
 import com.dicoding.vegefinder.viewmodel.UserViewModel
 import com.dicoding.vegefinder.viewmodel.VegetableViewModel
@@ -53,7 +56,7 @@ class ProfileActivity : AppCompatActivity() {
             ViewModelProvider.NewInstanceFactory()
         )[LogoutViewModel::class.java]
 
-
+        val profileImageView: ImageView = findViewById(R.id.iv_profile)
         val nameTextView: TextView = findViewById(R.id.tv_name)
         val emailTextView: TextView = findViewById(R.id.tv_email)
         val savedTextView: TextView = findViewById(R.id.tv_saved)
@@ -65,18 +68,34 @@ class ProfileActivity : AppCompatActivity() {
         val websiteButton: ImageButton = findViewById(R.id.ib_website)
         val logOutButton: TextView = findViewById(R.id.tv_logout)
 
-//        val currentUser = sessionManager.getUser()
-//        Log.d("EXPLORE TEXT", "Vegetable List: $currentUser")
+        val currentUser: User? = sessionManager.getUser()
+        Log.d("EXPLORE TEXT", "Vegetable List: $currentUser")
 
-//        if(currentUser != null){
-        userViewModel.setUser()
-        userViewModel.getUserResponse().observe(this) { user ->
-            if (user != null) {
-                nameTextView.text = user.name
-                emailTextView.text = user.email
-//                sessionManager.saveUser(user)
+        if(currentUser != null){
+            nameTextView.text = currentUser.name
+            emailTextView.text = currentUser.email
+            Glide.with(this)
+                .asBitmap()
+                .load("https://storage.googleapis.com/vegefinder-bucket/${currentUser.avatar}")
+                .centerCrop()
+                .placeholder(R.drawable.vegefinder)
+                .into(profileImageView)
+        }else{
+            userViewModel.setUser()
+            userViewModel.getUserResponse().observe(this) { user ->
+                if (user != null) {
+                    nameTextView.text = user.name
+                    emailTextView.text = user.email
+                    Glide.with(this)
+                        .asBitmap()
+                        .load("https://storage.googleapis.com/vegefinder-bucket/${user.avatar}")
+                        .centerCrop()
+                        .placeholder(R.drawable.vegefinder)
+                        .into(profileImageView)
+                    sessionManager.saveUser(user)
+                }
             }
-//            }
+
         }
 
         savedTextView.setOnClickListener {
@@ -144,6 +163,9 @@ class ProfileActivity : AppCompatActivity() {
                     sessionManager.clearSession()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finishAffinity()
+                }else{
+                    sessionManager.clearSession()
+                    Toast.makeText(this, "logout error", Toast.LENGTH_SHORT).show()
                 }
             }
 

@@ -39,7 +39,9 @@ class Saved : Fragment() {
 
         savedViewModel.setVegetable()
         savedViewModel.getVegetableResponse().observe(viewLifecycleOwner){vegetableList ->
-            savedAdapter.setVegetableList(vegetableList)
+            if(vegetableList != null){
+                savedAdapter.setVegetableList(vegetableList)
+            }
         }
 
         return view

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Activity.DetailExploreActivity
@@ -28,7 +29,7 @@ class SavedAdapter (private val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_explore, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_saved, parent, false)
         return ViewHolder(view)
     }
 
@@ -42,9 +43,10 @@ class SavedAdapter (private val context: Context) :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-        private val imageView: ImageView = itemView.findViewById(R.id.exp_image)
-        private val nameTextView: TextView = itemView.findViewById(R.id.exp_name)
-        private val descTextView: TextView = itemView.findViewById(R.id.exp_desc)
+        private val imageView: ImageView = itemView.findViewById(R.id.svd_image)
+        private val nameTextView: TextView = itemView.findViewById(R.id.svd_name)
+        private val descTextView: TextView = itemView.findViewById(R.id.svd_desc)
+        private val typeRecyclerView: RecyclerView = itemView.findViewById(R.id.rv_types)
 
         init {
             itemView.setOnClickListener(this)
@@ -57,6 +59,13 @@ class SavedAdapter (private val context: Context) :
                 .centerCrop()
                 .placeholder(R.drawable.kangkung)
                 .into(imageView)
+
+            val itemTypesName = item.types.map{it.name} as ArrayList<String>
+            val itemsTypesId = item.types.map{it.typeGroups.id} as ArrayList<Int>
+
+            typeRecyclerView.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            typeRecyclerView.adapter = TypeTagAdapter(itemTypesName, itemsTypesId, false)
 
             nameTextView.text = item.name
             descTextView.text = item.description

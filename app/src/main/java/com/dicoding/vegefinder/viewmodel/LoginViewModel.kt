@@ -25,26 +25,18 @@ class LoginViewModel : ViewModel() {
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
                 ) {
-                    val statusCode = response.code()
+                    val errorBody = response.errorBody()?.string()
+                    val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
 
                     if (response.isSuccessful) {
                         loginResponse.postValue(response.body())
                     }else{
-                        if(statusCode == 400){
-                            loginResponse.postValue(response.body())
-                        }else{
-                            if(statusCode == 422){
-                                val errorBody = response.errorBody()?.string()
-                                val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-                                loginResponse.postValue(errorResponse)
-                            }
-                        }
+                        loginResponse.postValue(errorResponse)
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     loginResponse.postValue(null)
-                    Log.v("Failure", "testt ->> " + t.message.toString())
                 }
             })
     }

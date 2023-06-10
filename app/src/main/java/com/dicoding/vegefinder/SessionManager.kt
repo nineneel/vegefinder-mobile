@@ -2,6 +2,7 @@ package com.dicoding.vegefinder
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.dicoding.vegefinder.data.model.Avatar
 import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.data.model.VegetableType
@@ -16,12 +17,20 @@ class SessionManager(context: Context) {
         var userToken : String? = null
     }
 
-    fun saveUser(user: User){
-        tinyDB.putObject("user", User::class.java)
+    fun saveAvatarList(avatars: ArrayList<Avatar>){
+        tinyDB.putListAvatar("avatarList", avatars)
     }
 
-    fun getUser(): User{
-        return tinyDB.getObject("user", User::class.java)
+    fun getAvatarList(): ArrayList<Avatar>{
+        return tinyDB.getAvatarList("avatarList")
+    }
+
+    fun saveUser(user: User){
+        tinyDB.putUser("currentUser", user)
+    }
+
+    fun getUser(): User? {
+        return tinyDB.getUser("currentUser")
     }
 
     fun saveVegetableList(vegetableList: ArrayList<Vegetable>){
@@ -63,11 +72,15 @@ class SessionManager(context: Context) {
     }
 
     fun clearSession() {
-        tinyDB.remove("user")
+        tinyDB.remove("currentUser")
         tinyDB.remove("vegetableList")
         tinyDB.remove("vegetableTypeList")
         val editor = prefs.edit()
         editor.clear()
         editor.apply()
+    }
+
+    fun removeByKey(key: String){
+        tinyDB.remove(key)
     }
 }
