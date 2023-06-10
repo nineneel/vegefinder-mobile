@@ -164,14 +164,6 @@
                     android:isScrollContainer="true"
                     android:orientation="horizontal" />
 
-                <!--            <ImageButton-->
-                <!--                android:id="@+id/avatar_register"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="20dp"-->
-                <!--                android:layout_marginEnd="20dp"-->
-                <!--                android:background="?attr/selectableItemBackground"-->
-                <!--                android:contentDescription="Google"-->
-                <!--                android:src="@drawable/ic_launcher_background" />-->
 
             </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.dicoding.vegefinder
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.ExploreAdapter
 import com.dicoding.vegefinder.Adapter.SavedAdapter
-import com.dicoding.vegefinder.Adapter.SavedData
 import com.dicoding.vegefinder.viewmodel.SavedViewModel
 import com.dicoding.vegefinder.viewmodel.VegetableViewModel
 
@@ -45,5 +45,20 @@ class Saved : Fragment() {
         }
 
         return view
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        savedAdapter.notifyDataSetChanged()
+
+        savedViewModel.setVegetable()
+        savedViewModel.getVegetableResponse().observe(viewLifecycleOwner) { response ->
+            if(response != null){
+                savedAdapter.setVegetableList(response)
+            }
+        }
+
     }
 }

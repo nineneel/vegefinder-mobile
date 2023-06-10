@@ -103,4 +103,20 @@ class Home : Fragment() {
 
         return view
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        historyAdapter.notifyDataSetChanged()
+
+        homeHistoryViewModel.setHistory()
+        homeHistoryViewModel.getHistoryResponse().observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                historyAdapter.setVegetableList(response)
+            } else {
+                Log.d("HOME", "Home histories null")
+            }
+        }
+
+    }
 }

@@ -7,7 +7,6 @@ import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.data.model.VegetableType
 import com.dicoding.vegefinder.data.request.LoginRequest
-import com.dicoding.vegefinder.data.request.PredictRequest
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.LoginResponse
 import com.dicoding.vegefinder.data.response.LogoutResponse
@@ -65,10 +64,9 @@ interface Api {
 
     @Multipart
     @POST("predict")
-    @Headers("X-Requested-With: XMLHttpRequest")
     fun getPredict(
-        @Header("Authorization") token: String = "Bearer ${SessionManager.userToken}",
         @Part image: MultipartBody.Part,
+        @Part("user_id") user_id: Int
     ): Call<PredictResponse>
 
     @GET("saveds")

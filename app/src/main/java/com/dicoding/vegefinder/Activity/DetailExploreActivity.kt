@@ -1,26 +1,37 @@
 package com.dicoding.vegefinder.Activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.dicoding.vegefinder.Adapter.ImageSlideAdapter
 import com.dicoding.vegefinder.Adapter.TypeTagAdapter
 import com.dicoding.vegefinder.R
+import com.dicoding.vegefinder.data.model.Vegetable
+import com.dicoding.vegefinder.databinding.ActivityDetailexploreBinding
+import com.dicoding.vegefinder.databinding.ActivityMainBinding
 import com.dicoding.vegefinder.getScreenHeight
 import com.dicoding.vegefinder.viewmodel.SaveVegetableViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DetailExploreActivity : AppCompatActivity() {
 
@@ -29,10 +40,16 @@ class DetailExploreActivity : AppCompatActivity() {
     private var isSavedVegetable: Boolean = false
     private var isProccess: Boolean = false
 
+    private lateinit var imageSlideAdapter: ImageSlideAdapter
+    private lateinit var imageDotsLinearLayout: LinearLayout
+    private val imageList = ArrayList<String>()
+    private lateinit var dots: ArrayList<TextView>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailexplore)
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
@@ -41,10 +58,11 @@ class DetailExploreActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+
         val bottom_sheet = findViewById<FrameLayout>(R.id.bottom_sheet)
 
         BottomSheetBehavior.from(bottom_sheet).apply {
-            peekHeight = getScreenHeight() - 620
+            peekHeight = getScreenHeight() - 780
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -70,9 +88,12 @@ class DetailExploreActivity : AppCompatActivity() {
         val isSaved = intent.getBooleanExtra("isSaved", false)
 
 
+
         val nameTextView = findViewById<TextView>(R.id.tv_name)
         val recyclerViewType = findViewById<RecyclerView>(R.id.rv_types)
-        val thumbnailImageView = findViewById<ImageView>(R.id.iv_thumbnail)
+        val imageViewPager = findViewById<ViewPager2>(R.id.view_pager)
+        imageDotsLinearLayout = findViewById(R.id.dots_indicator)
+
         val descriptionTextView = findViewById<TextView>(R.id.tv_description)
         val descriptionSourceTextView = findViewById<TextView>(R.id.tv_description_source)
         val howToPlantTextView = findViewById<TextView>(R.id.tv_how_to_plant)
@@ -81,7 +102,13 @@ class DetailExploreActivity : AppCompatActivity() {
         val plantCareTextViewSource = findViewById<TextView>(R.id.tv_plant_care_source)
         val plantDiseaseTextView = findViewById<TextView>(R.id.tv_plant_disease)
         val plantDiseaseTextViewSource = findViewById<TextView>(R.id.tv_plant_disease_source)
-        val saveButton = findViewById<Button>(R.id.btn_saved)
+        val saveButton = findViewById<FloatingActionButton>(R.id.btn_saved)
+
+        images?.map{imageList.add(it)}
+
+
+        imageSlideAdapter = ImageSlideAdapter(imageList)
+        imageViewPager.adapter = imageSlideAdapter
 
         isSavedVegetable = isSaved
         activeToogleSaveButton(saveButton)
@@ -98,12 +125,6 @@ class DetailExploreActivity : AppCompatActivity() {
             }
         }
 
-        Glide.with(thumbnailImageView)
-            .asBitmap()
-            .load("https://storage.googleapis.com/vegefinder-bucket/${thumbnail}")
-            .centerCrop()
-            .placeholder(R.drawable.kangkung)
-            .into(thumbnailImageView)
         nameTextView.text = name
         descriptionTextView.text = description
         descriptionSourceTextView.text = descriptionSource
@@ -144,19 +165,27 @@ class DetailExploreActivity : AppCompatActivity() {
             }
 
         }
+
+        dots = ArrayList()
+        setIndicator()
+
+        imageViewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                selectedDot(position)
+                super.onPageSelected(position)
+            }
+        })
     }
 
-    private fun activeToogleSaveButton(saveButton: Button) {
-        if (isSavedVegetable) {
-            saveButton.text = "Unsave This Vegetable"
-            saveButton.background =
-                ContextCompat.getDrawable(this, R.drawable.button_saved_deactive)
-        } else {
-            saveButton.text = "Save This Vegetable"
-            saveButton.background = ContextCompat.getDrawable(this, R.drawable.button_scan)
+    private fun selectedDot(position: Int){
+        for(i in 0 until imageList.size){
+            if(i == position)
+                dots[i].setTextColor(ContextCompat.getColor(this, R.color.orange))
+            else
+                dots[i].setTextColor(ContextCompat.getColor(this, R.color.grey))
+
         }
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
@@ -165,4 +194,26 @@ class DetailExploreActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun activeToogleSaveButton(saveButton: FloatingActionButton) {
+        if (isSavedVegetable) {
+            saveButton.backgroundTintList = ColorStateList.valueOf(Color.rgb(89, 147, 68))
+        } else {
+            saveButton.backgroundTintList = ColorStateList.valueOf(Color.rgb(231, 231, 231))
+        }
+    }
+
+    private fun setIndicator(){
+        for(i in 0 until imageList.size){
+            dots.add(TextView(this))
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                dots[i].text = Html.fromHtml("&#9679", Html.FROM_HTML_MODE_LEGACY).toString()
+            }else{
+                dots[i].text = Html.fromHtml("&#9679")
+            }
+            dots[i].textSize = 18f
+            imageDotsLinearLayout.addView(dots[i])
+        }
+    }
+
 }

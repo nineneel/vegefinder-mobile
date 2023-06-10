@@ -95,10 +95,8 @@ class MainActivity : AppCompatActivity() {
 
         val fragmentKey = intent.getStringExtra("FRAGMENT_KEY")
         if (fragmentKey == "saved") {
-            val fragment = Saved()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, fragment)
-                .commit()
+            replaceFragment(Saved())
+            binding.bottomNavigationView.menu.findItem(R.id.saved).isChecked = true
         }
 
         val nightMode = getSharedPreferences("MODE", Context.MODE_PRIVATE)
@@ -138,8 +136,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private  fun replaceFragment(fragment: Fragment){
-
+    private  fun replaceFragment(fragment: Fragment)
+    {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout,fragment)

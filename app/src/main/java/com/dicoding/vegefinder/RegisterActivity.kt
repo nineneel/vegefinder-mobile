@@ -85,19 +85,20 @@ class RegisterActivity : AppCompatActivity() {
 
         val avatarList: ArrayList<Avatar> = sessionManager.getAvatarList()
 
-        if(avatarList.size > 0){
+        if (avatarList.size > 0) {
             avatarAdapter.setAvatarList(avatarList)
         }
 
         avatarViewModel.setAvatars()
         avatarViewModel.getAvatarsResponse().observe(this) { response ->
             if (response != null) {
-                if(avatarList.size == 0){
+                if (avatarList.size == 0) {
                     avatarAdapter.setAvatarList(response)
                     sessionManager.saveAvatarList(response)
-                }else if(avatarList.size < response.size){
+                } else if (avatarList.size < response.size) {
                     sessionManager.removeByKey("avatarList")
                     sessionManager.saveAvatarList(response)
+                    avatarAdapter.setAvatarList(response)
                 }
             }
         }

@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -24,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.vegefinder.Activity.DetailExploreActivity
 import com.dicoding.vegefinder.data.request.PredictRequest
 import com.dicoding.vegefinder.databinding.ActivityCameraBinding
+import com.dicoding.vegefinder.helper.FileHelper
 import com.dicoding.vegefinder.viewmodel.PredictViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -37,12 +39,14 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var imageResult: ImageView
     private lateinit var uploadButton: Button
-    private lateinit var takePictureBtn: FloatingActionButton
+    private lateinit var takePictureBtn: ImageButton
     private lateinit var predictViewModel: PredictViewModel
-    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingLayout: View
     private lateinit var container: ConstraintLayout
+    private lateinit var currentPhotoPath : String
+    private lateinit var sessionManager: SessionManager
+    private lateinit var deletePictureBtn: ImageButton
 
-    private var currentPhotoPath = ""
     private var isProcessImage = false
     private var selectedImageFile: File? = null
 
@@ -60,8 +64,10 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
 
         imageResult = findViewById(R.id.imageResult)
-        progressBar = findViewById(R.id.progress_bar)
+        loadingLayout = findViewById(R.id.loading_layout)
         container = findViewById(R.id.container)
+
+        sessionManager = SessionManager(this)
 
         predictViewModel = ViewModelProvider(
             this,
@@ -76,6 +82,11 @@ class CameraActivity : AppCompatActivity() {
         uploadButton = findViewById(R.id.btn_upload)
         uploadButton.setOnClickListener{
             checkInputs()
+        }
+
+        deletePictureBtn = findViewById(R.id.btn_delete_picture)
+        deletePictureBtn.setOnClickListener{
+            removeImageResult()
         }
     }
 
@@ -113,11 +124,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun uploadListener(imageMultipart: MultipartBody.Part){
+        val user = sessionManager.getUser()
+        val userId = user?.id ?: 0
         showLoading(true)
-        predictViewModel.sendVegetableImage(imageMultipart)
+        predictViewModel.sendVegetableImage(imageMultipart, userId)
         predictViewModel.getPredictResponse().observe(this){response ->
-            showLoading(false)
-            if(response != null) {
+            if(response != null && response.status == "success") {
                 Log.d("CAMERA CHECK", "Works: $response")
                 val intent = Intent(this, DetailExploreActivity::class.java)
                 intent.putExtra("name", response.vegetable?.name)
@@ -134,23 +146,14 @@ class CameraActivity : AppCompatActivity() {
                 intent.putExtra("plantDisease", response.vegetable.plantDisease)
                 intent.putExtra("plantDiseaseSource", response.vegetable.plantDiseaseSource)
 
-//                intent.putExtra("name", response.vegetable?.name)
-//                intent.putExtra("description", response.vegetable.description)
-//                intent.putExtra("descriptionSource", response.vegetable.descriptionSource)
-//                intent.putExtra("thumbnail", response.vegetable.thumbnail)
-//                intent.putExtra("howToPlant", response.vegetable.howToPlant)
-//                intent.putExtra("howToPlantSource", response.vegetable.howToPlantSource)
-//                intent.putExtra("plantCare", response.vegetable.plantCare)
-//                intent.putExtra("plantCareSource", response.vegetable.plantCareSource)
-//                intent.putExtra("plantDisease", response.vegetable.plantDisease)
-//                intent.putExtra("plantDiseaseSource", response.vegetable.plantDiseaseSource)
                 finish()
                 this.startActivity(intent)
             }else{
                 isProcessImage = false
-                Log.d("CAMERA CHECK", "Works: null")
-                Toast.makeText(this@CameraActivity, "Response IS NULL", Toast.LENGTH_SHORT).show()
+                Log.d("CAMERA CHECK", "Works: $response")
+                Toast.makeText(this@CameraActivity, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
+            showLoading(false)
         }
     }
 
@@ -176,18 +179,22 @@ class CameraActivity : AppCompatActivity() {
 
     private val launcherIntentCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
-            val myFile = File(currentPhotoPath)
-            selectedImageFile = myFile
-            myFile.let { file ->
-                imageResult.setImageBitmap(BitmapFactory.decodeFile(file.path))
+            selectedImageFile = FileHelper.reduceFileImage(File(currentPhotoPath))
+            if(selectedImageFile != null) {
+                val result =  BitmapFactory.decodeFile(selectedImageFile!!.path)
+                imageResult.setImageBitmap(result)
+            } else {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-
-    private fun showLoading(state: Boolean) {
-        progressBar.visibility = if (state) View.VISIBLE else View.GONE
-        imageResult.visibility = if (state) View.GONE else View.VISIBLE
+    private fun removeImageResult(){
+        imageResult.setImageDrawable(null)
+        selectedImageFile = null
     }
 
+    private fun showLoading(state: Boolean) {
+        loadingLayout.visibility = if (state) View.VISIBLE else View.GONE
+    }
 }
