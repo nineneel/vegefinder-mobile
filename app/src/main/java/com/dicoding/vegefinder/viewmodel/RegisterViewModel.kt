@@ -26,19 +26,21 @@ class RegisterViewModel : ViewModel() {
                     response: Response<RegisterResponse>
                 ) {
                     val statusCode = response.code()
+                    val errorBody = response.errorBody()?.string()
+                    val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
 
                     if (response.isSuccessful) {
                         registerResponse.postValue(response.body())
-                    }else{
-                        if(statusCode == 422){
-                            val errorBody = response.errorBody()?.string()
-                            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
-                            registerResponse.postValue(errorResponse)
-                        }
+                    }else {
+                        registerResponse.postValue(errorResponse)
                     }
+
+                    Log.d("Register", "Failuer top $errorResponse with code $statusCode")
+
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Log.d("Register", "Failuer ${t.message}")
                     registerResponse.postValue(null)
                 }
 

@@ -10,5 +10,7 @@ data class User(
     @SerializedName("email")
     val email: String,
     @SerializedName("api_token")
-    val apiToken: String
+    val apiToken: String,
+    @SerializedName("avatar")
+    val avatar: String,
 )

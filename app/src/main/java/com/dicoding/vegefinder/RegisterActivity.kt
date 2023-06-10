@@ -1,6 +1,7 @@
 package com.dicoding.vegefinder
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,9 +15,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.dicoding.vegefinder.Adapter.AvatarAdapter
+import com.dicoding.vegefinder.data.model.Avatar
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.RegisterResponse
 import com.dicoding.vegefinder.databinding.ActivityRegisterBinding
+import com.dicoding.vegefinder.viewmodel.AvatarViewModel
 import com.dicoding.vegefinder.viewmodel.RegisterViewModel
 import com.google.android.material.button.MaterialButton
 
@@ -24,16 +30,26 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var btnLogin: TextView
     private lateinit var registerViewModel: RegisterViewModel
+    private lateinit var avatarViewModel: AvatarViewModel
     private lateinit var etName: EditText
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var etRePassword: EditText
+    private lateinit var rvAvatars: RecyclerView
+    private lateinit var loadingLayout: View
     private lateinit var btnRegis: Button
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var avatarAdapter: AvatarAdapter
+    private lateinit var sessionManager: SessionManager
 
     private var errorDialog: AlertDialog? = null
+    private var avatarId: Int? = null
+
+    private var totalResponse: Int = 0
+    private var currentResponse: Int = 0
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -43,11 +59,51 @@ class RegisterActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Register"
 
+        sessionManager = SessionManager(this)
+
         etName = findViewById(R.id.register_name)
         etEmail = findViewById(R.id.register_email)
         etPassword = findViewById(R.id.register_password)
         etRePassword = findViewById(R.id.valid_password)
         btnRegis = findViewById(R.id.btn_regis)
+        loadingLayout = findViewById(R.id.loading_layout)
+
+        avatarAdapter = AvatarAdapter { id ->
+            avatarId = id
+            Log.d("REGISTER", "TEST ID: $id")
+        }
+        avatarAdapter.notifyDataSetChanged()
+
+        avatarViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[AvatarViewModel::class.java]
+
+        rvAvatars = findViewById(R.id.rv_avatars)
+        rvAvatars.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvAvatars.adapter = avatarAdapter
+
+        val avatarList: ArrayList<Avatar> = sessionManager.getAvatarList()
+
+        if(avatarList.size > 0){
+            avatarAdapter.setAvatarList(avatarList)
+        }
+
+        avatarViewModel.setAvatars()
+        avatarViewModel.getAvatarsResponse().observe(this) { response ->
+            if (response != null) {
+                if(avatarList.size == 0){
+                    avatarAdapter.setAvatarList(response)
+                    sessionManager.saveAvatarList(response)
+                }else if(avatarList.size < response.size){
+                    sessionManager.removeByKey("avatarList")
+                    sessionManager.saveAvatarList(response)
+                }
+            }
+        }
+
+
+
 
         registerViewModel = ViewModelProvider(
             this,
@@ -60,13 +116,15 @@ class RegisterActivity : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val rePassword = etRePassword.text.toString().trim()
 
+            Log.d("REGISTER", "TEST ID ONBUTTON: $avatarId")
+
             if (name.isEmpty()) {
                 etName.error = "Name cannot be empty"
                 etName.requestFocus()
                 return@setOnClickListener
             }
 
-            if (email.isEmpty()){
+            if (email.isEmpty()) {
                 etEmail.error = "Email cannot be empty"
                 etEmail.requestFocus()
                 return@setOnClickListener
@@ -84,14 +142,17 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if(password != rePassword){
+            if (password != rePassword) {
                 etRePassword.error = "Password and confirmation password didn't match"
                 etRePassword.requestFocus()
                 return@setOnClickListener
             }
 
-
-            val avatarId = (1..4).random()
+            if (avatarId == null) {
+                etRePassword.error = "Need avatar Id"
+                etRePassword.requestFocus()
+                return@setOnClickListener
+            }
 
             val data = RegisterRequest(
                 binding.registerName.text.toString(),
@@ -104,28 +165,34 @@ class RegisterActivity : AppCompatActivity() {
             showLoading(true)
 
             registerViewModel.register(data)
-            registerViewModel.getResponse().observe(this){ response ->
-                if (response!=null){
-                    if(response.status == "success"){
-                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                    }else{
-                        showLoading(false)
-                        val emailError = response.errors?.email?.getOrNull(0)
-                        val passwordError = response.errors?.password?.getOrNull(0)
+            registerViewModel.getResponse().observe(this) { response ->
+                Log.d("Register", "test response $response")
 
-                        if(emailError != null){
-                            etEmail.error = emailError
-                            etEmail.requestFocus()
-                            return@observe
-                        }
+                if (totalResponse <= currentResponse) {
+                    if (response != null) {
+                        if (response.status == "success") {
+                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                            finish()
+                        } else {
+                            val emailError = response.errors?.email?.getOrNull(0)
+                            val passwordError = response.errors?.password?.getOrNull(0)
 
-                        if(passwordError != null){
-                            etPassword.error = passwordError
-                            etPassword.requestFocus()
-                            return@observe
+                            if (emailError != null) {
+                                etEmail.error = emailError
+                                etEmail.requestFocus()
+                            }
+
+                            if (passwordError != null) {
+                                etPassword.error = passwordError
+                                etPassword.requestFocus()
+                            }
                         }
                     }
+                    showLoading(false)
+                    totalResponse++
+                    currentResponse = 0
                 }
+                currentResponse++
             }
 
         }
@@ -145,7 +212,9 @@ class RegisterActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
     private fun showLoading(state: Boolean) {
-        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+        loadingLayout.visibility = if (state) View.VISIBLE else View.GONE
     }
+
 }

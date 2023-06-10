@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,8 +50,14 @@ class Explore : Fragment() {
 
                 vegetableViewModel.setVegetable()
                 vegetableViewModel.getVegetableResponse().observe(viewLifecycleOwner) { response ->
-                    exploreAdapter.setVegetableList(response)
-                    sessionManager.saveVegetableList(response)
+                    if (response != null) {
+                        exploreAdapter.setVegetableList(response)
+                        sessionManager.saveVegetableList(response)
+                    }else{
+                        Toast.makeText(requireContext(), "Its a toast!", Toast.LENGTH_SHORT).show()
+
+                    }
+
                 }
             }
         }
