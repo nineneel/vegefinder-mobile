@@ -10,4 +10,8 @@ data class PredictResponse(
 	val vegetable: Vegetable? = null,
 	@SerializedName("message")
 	val message: String? = null,
+	@SerializedName("is_auth")
+	val isAuth: Boolean? = null,
+	@SerializedName("probabilities")
+	val probabilities: String? = null
 )

@@ -1,197 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.VegeFinder"
     tools:context=".Activity.ProfileActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.VegeFinder"
+        android:background="?attr/colorSecondary">
 
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="48dp"
-            android:src="@drawable/tomato"
-            android:contentDescription="profile_user"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:text="Name User"
-            android:textSize="28dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_profile"
-            app:layout_constraintTop_toTopOf="@+id/iv_profile" />
-
-        <TextView
-            android:id="@+id/tv_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="tomatomato@gmail.com"
-            app:layout_constraintStart_toEndOf="@+id/iv_profile"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-        <TextView
-            android:id="@+id/tv_persona"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="38dp"
-            android:text="Personalization"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintTop_toBottomOf="@id/iv_profile"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_saved"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/ic_saved"
-            android:drawablePadding="8dp"
-            android:drawableTint="#599344"
-            android:text="Saved"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_persona" />
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinatorLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_history"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="10dp"
-            android:drawableStart="@drawable/ic_history"
-            android:drawablePadding="8dp"
-            android:drawableTint="#599344"
-            android:text="History"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_saved" />
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="?attr/colorSecondary"
+                    app:elevation="0dp">
 
-        <TextView
-            android:id="@+id/tv_theme"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="10dp"
-            android:drawableStart="@drawable/ic_dark"
-            android:drawablePadding="8dp"
-            android:drawableTint="#599344"
-            android:text="Dark Mode"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_history" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_theme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_theme"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_about"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="24dp"
-            android:text="About"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintTop_toBottomOf="@id/tv_theme"
-            app:layout_constraintStart_toStartOf="parent"/>
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:navigationIcon="@drawable/arrow_left_icon">
 
-        <TextView
-            android:id="@+id/tv_logout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="20dp"
-            android:text="Log Out"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:textColor="?android:textColorPrimary"
-            app:layout_constraintTop_toBottomOf="@id/tv_about"
-            app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/tv_followus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="60dp"
-            android:text="Follow Us"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.456"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_logout"/>
+                        </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="20dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_followus"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Profile"
+                            android:textColor="?android:textColorPrimary"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/ib_instagram"
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <ImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="90dp"
+                android:src="@drawable/tomato"
+                android:contentDescription="profile_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/instagram"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="Instagram"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:text="Name User"
+                android:textSize="28dp"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile"
+                app:layout_constraintTop_toTopOf="@+id/iv_profile" />
 
-            <ImageButton
-                android:id="@+id/ib_linkedin"
+            <TextView
+                android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/linkedin"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="Linkedin"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginStart="16dp"
+                android:text="tomatomato@gmail.com"
+                app:layout_constraintStart_toEndOf="@+id/iv_profile"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
-            <ImageButton
-                android:id="@+id/ib_website"
+            <TextView
+                android:id="@+id/tv_persona"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="38dp"
+                android:text="Personalization"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/iv_profile"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_saved"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/saved"
+                android:drawablePadding="8dp"
+                android:drawableTint="#599344"
+                android:text="Saved"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_persona" />
+
+            <TextView
+                android:id="@+id/tv_history"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/clock_icon"
+                android:drawablePadding="8dp"
+                android:drawableTint="#599344"
+                android:text="History"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_saved" />
+
+            <TextView
+                android:id="@+id/tv_theme"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/moon_icon"
+                android:drawablePadding="8dp"
+                android:drawableTint="#599344"
+                android:text="Dark Mode"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_history" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:contentDescription="Website"
-                android:src="@drawable/website" />
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_theme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_theme"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tv_about"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="24dp"
+                android:text="About"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/tv_theme"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="20dp"
+                android:text="Log Out"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:textColor="?android:textColorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/tv_about"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_followus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="60dp"
+                android:text="Follow Us"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.456"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_logout"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_followus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageButton
+                    android:id="@+id/ib_instagram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/instagram"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Instagram"
+                    android:layout_marginEnd="8dp" />
+
+                <ImageButton
+                    android:id="@+id/ib_linkedin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/linkedin"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Linkedin"
+                    android:layout_marginEnd="8dp" />
+
+                <ImageButton
+                    android:id="@+id/ib_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:contentDescription="Website"
+                    android:src="@drawable/website" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/loading_layout"
+        layout="@layout/loading_layout"
+        android:visibility="gone" />
+
+</RelativeLayout>

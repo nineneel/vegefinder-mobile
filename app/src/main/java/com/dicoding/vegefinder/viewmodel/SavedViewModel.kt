@@ -11,7 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SavedViewModel: ViewModel() {
-    val vegetableResponse = MutableLiveData<ArrayList<Vegetable>>()
+    val vegetableResponse = MutableLiveData<ArrayList<Vegetable>?>()
 
     fun setVegetable(){
         RetrofitClient.apiInstance
@@ -27,13 +27,12 @@ class SavedViewModel: ViewModel() {
                 }
 
                 override fun onFailure(call: Call<ArrayList<Vegetable>>, t: Throwable) {
-                    Log.v("Failure", "testt ->> ${t.message.toString()}")
                     vegetableResponse.postValue(null)
                 }
             })
     }
 
-    fun getVegetableResponse(): LiveData<ArrayList<Vegetable>> {
+    fun getVegetableResponse(): LiveData<ArrayList<Vegetable>?> {
         return vegetableResponse
     }
 }

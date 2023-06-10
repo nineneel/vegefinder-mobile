@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +25,14 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val tvHistory = findViewById<TextView>(R.id.tv_nohistory)
+
+        setSupportActionBar(toolbar)
+        assert(supportActionBar != null)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         historyAllAdapter = HistoryAllAdapter(this)
         historyAllAdapter.notifyDataSetChanged()
 
@@ -29,11 +40,15 @@ class HistoryActivity : AppCompatActivity() {
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAllAdapter
 
+
         historyViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[HistoryViewModel::class.java]
 
         historyViewModel.setHistory()
         historyViewModel.getHistoryResponse().observe(this){response->
-            historyAllAdapter.setVegetableList(response)
+            if(response.size > 0){
+                historyAllAdapter.setVegetableList(response)
+                tvHistory.visibility = View.GONE
+            }
         }
     }
 

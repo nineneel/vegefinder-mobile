@@ -19,7 +19,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="25dp"
             android:background="@drawable/button_scan"
-            android:drawableLeft="@drawable/scan"
+            android:drawableLeft="@drawable/scan_icon"
             android:text="Scan and Identify Vege"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -53,14 +53,26 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:isScrollContainer="false"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_history" />
+
+            <TextView
+                android:id="@+id/tv_nohistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="History Kosong"
+                android:textSize="20dp" />
 
         </RelativeLayout>
 
@@ -93,6 +105,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
                 android:isScrollContainer="false"
+                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_jenis" />
 
         </RelativeLayout>

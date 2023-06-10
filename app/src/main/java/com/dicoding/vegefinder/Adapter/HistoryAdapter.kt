@@ -56,7 +56,7 @@ class HistoryAdapter (private val context: Context) :
                 .asBitmap()
                 .load("https://storage.googleapis.com/vegefinder-bucket/${item.thumbnail}")
                 .centerCrop()
-                .placeholder(R.drawable.kangkung)
+                .placeholder(R.drawable.vegefinder)
                 .into(imageView)
 
             nameTextView.text = item.name

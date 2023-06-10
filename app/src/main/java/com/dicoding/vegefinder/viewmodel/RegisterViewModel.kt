@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.dicoding.vegefinder.api.RetrofitClient
+import com.dicoding.vegefinder.data.Result
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.RegisterResponse
 import com.google.gson.Gson
@@ -14,9 +16,12 @@ import retrofit2.Response
 
 class RegisterViewModel : ViewModel() {
 
-    val registerResponse = MutableLiveData<RegisterResponse>()
 
-    fun register(registerRequest: RegisterRequest) {
+    fun register(registerRequest: RegisterRequest): LiveData<Result<RegisterResponse?>> = liveData {
+        emit(Result.Loading)
+
+        val returnValue = MutableLiveData<Result<RegisterResponse?>>()
+        var returnErrorValue: String? = null
 
         RetrofitClient.apiInstance
             .register(registerRequest)
@@ -25,30 +30,25 @@ class RegisterViewModel : ViewModel() {
                     call: Call<RegisterResponse>,
                     response: Response<RegisterResponse>
                 ) {
-                    val statusCode = response.code()
                     val errorBody = response.errorBody()?.string()
                     val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
 
                     if (response.isSuccessful) {
-                        registerResponse.postValue(response.body())
-                    }else {
-                        registerResponse.postValue(errorResponse)
+                        returnValue.value = Result.Success(response.body())
+                    } else {
+                        returnValue.value = Result.Success(errorResponse)
                     }
-
-                    Log.d("Register", "Failuer top $errorResponse with code $statusCode")
-
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Log.d("Register", "Failuer ${t.message}")
-                    registerResponse.postValue(null)
+                    returnErrorValue = t.message.toString()
                 }
-
             })
 
-    }
+        if (returnErrorValue != null) {
+            emit(Result.Error(returnErrorValue!!))
+        }
 
-    fun getResponse(): LiveData<RegisterResponse> {
-        return registerResponse
+        emitSource(returnValue)
     }
 }

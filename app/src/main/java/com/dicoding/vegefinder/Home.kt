@@ -20,6 +20,7 @@ import com.dicoding.vegefinder.Adapter.HistoryAdapter
 import com.dicoding.vegefinder.Adapter.VegetableTypeAdapter
 import com.dicoding.vegefinder.viewmodel.HomeHistoryViewModel
 import com.dicoding.vegefinder.viewmodel.HomeTypeViewModel
+import org.w3c.dom.Text
 
 class Home : Fragment() {
 
@@ -38,6 +39,7 @@ class Home : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        val tvHistory : TextView = view.findViewById(R.id.tv_nohistory)
         val b1: Button = view.findViewById(R.id.btn_scan)
         b1.setOnClickListener {
             val i = Intent(activity, CameraActivity::class.java)
@@ -88,10 +90,9 @@ class Home : Fragment() {
 
         homeHistoryViewModel.setHistory()
         homeHistoryViewModel.getHistoryResponse().observe(viewLifecycleOwner) { response ->
-            if (response != null) {
+            if (response.size > 0) {
                 historyAdapter.setVegetableList(response)
-            } else {
-                Log.d("HOME", "Home histories null")
+                tvHistory.visibility = View.GONE
             }
         }
 
@@ -102,5 +103,21 @@ class Home : Fragment() {
         }
 
         return view
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        historyAdapter.notifyDataSetChanged()
+
+        homeHistoryViewModel.setHistory()
+        homeHistoryViewModel.getHistoryResponse().observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                historyAdapter.setVegetableList(response)
+            } else {
+                Log.d("HOME", "Home histories null")
+            }
+        }
+
     }
 }

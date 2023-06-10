@@ -52,6 +52,7 @@
                         android:paddingRight="15dp"
                         android:text="Description"
                         android:textSize="8dp"
+                        android:textColor="#969696"
                         android:ellipsize="end"
                         android:maxLines="2"/>
 

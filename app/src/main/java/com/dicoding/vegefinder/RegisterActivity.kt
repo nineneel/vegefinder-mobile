@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.vegefinder.Adapter.AvatarAdapter
+import com.dicoding.vegefinder.data.Result
 import com.dicoding.vegefinder.data.model.Avatar
 import com.dicoding.vegefinder.data.request.RegisterRequest
 import com.dicoding.vegefinder.data.response.RegisterResponse
@@ -85,19 +86,20 @@ class RegisterActivity : AppCompatActivity() {
 
         val avatarList: ArrayList<Avatar> = sessionManager.getAvatarList()
 
-        if(avatarList.size > 0){
+        if (avatarList.size > 0) {
             avatarAdapter.setAvatarList(avatarList)
         }
 
         avatarViewModel.setAvatars()
         avatarViewModel.getAvatarsResponse().observe(this) { response ->
             if (response != null) {
-                if(avatarList.size == 0){
+                if (avatarList.size == 0) {
                     avatarAdapter.setAvatarList(response)
                     sessionManager.saveAvatarList(response)
-                }else if(avatarList.size < response.size){
+                } else if (avatarList.size < response.size) {
                     sessionManager.removeByKey("avatarList")
                     sessionManager.saveAvatarList(response)
+                    avatarAdapter.setAvatarList(response)
                 }
             }
         }
@@ -164,37 +166,41 @@ class RegisterActivity : AppCompatActivity() {
 
             showLoading(true)
 
-            registerViewModel.register(data)
-            registerViewModel.getResponse().observe(this) { response ->
-                Log.d("Register", "test response $response")
+            registerViewModel.register(data).observe(this){result ->
+                when(result){
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        showLoading(false)
+                        val response = result.data
+                        if (response != null) {
+                            if (response.status == "success") {
+                                startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                                finish()
+                            } else {
+                                val emailError = response.errors?.email?.getOrNull(0)
+                                val passwordError = response.errors?.password?.getOrNull(0)
 
-                if (totalResponse <= currentResponse) {
-                    if (response != null) {
-                        if (response.status == "success") {
-                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                            finish()
-                        } else {
-                            val emailError = response.errors?.email?.getOrNull(0)
-                            val passwordError = response.errors?.password?.getOrNull(0)
+                                if (emailError != null) {
+                                    etEmail.error = emailError
+                                    etEmail.requestFocus()
+                                }
 
-                            if (emailError != null) {
-                                etEmail.error = emailError
-                                etEmail.requestFocus()
-                            }
-
-                            if (passwordError != null) {
-                                etPassword.error = passwordError
-                                etPassword.requestFocus()
+                                if (passwordError != null) {
+                                    etPassword.error = passwordError
+                                    etPassword.requestFocus()
+                                }
                             }
                         }
                     }
-                    showLoading(false)
-                    totalResponse++
-                    currentResponse = 0
                 }
-                currentResponse++
-            }
 
+            }
         }
 
         btnLogin = findViewById(R.id.signIn)

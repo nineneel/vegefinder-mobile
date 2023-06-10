@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
+    tools:context=".RegisterActivity">
 
-    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".RegisterActivity">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:background="#599344"
-                android:gravity="center">
+                android:background="#599344">
 
                 <ImageView
                     android:layout_width="112dp"
                     android:layout_height="112dp"
-                    android:src="@drawable/logo" />
-            </RelativeLayout>
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/vegefinder_logo"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:layout_width="181dp"
@@ -61,7 +57,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
                 android:text="Create Account"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -70,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:text="Please register below"
-                android:textColor="@color/black"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="10dp"
                 android:textStyle="bold" />
 
@@ -82,13 +78,14 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/ic_person"
+                android:drawableLeft="@drawable/user_icon"
                 android:drawablePadding="15dp"
                 android:hint="Name"
+                android:inputType="textPersonName"
                 android:padding="10dp"
                 android:textColorHint="#969696"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"
+                android:textSize="16dp" />
 
             <EditText
                 android:id="@+id/register_email"
@@ -101,10 +98,11 @@
                 android:drawableLeft="@drawable/ic_email"
                 android:drawablePadding="15dp"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black"/>
 
             <EditText
                 android:id="@+id/register_password"
@@ -114,14 +112,14 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/ic_lock"
+                android:drawableLeft="@drawable/lock_icon"
                 android:drawablePadding="15dp"
-                android:hint="Re-Password"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/valid_password"
@@ -131,14 +129,14 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/edittext_background"
-                android:drawableLeft="@drawable/ic_lock"
+                android:drawableLeft="@drawable/lock_icon"
                 android:drawablePadding="15dp"
-                android:hint="Valid-Password"
+                android:hint="Confirmation Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:textColorHint="#969696"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,6 +151,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
@@ -233,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have account?"
-                    android:textColor="@color/black"
+                    android:textColor="?android:textColorPrimary"
                     android:textStyle="bold" />
 
                 <TextView

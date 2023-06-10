@@ -58,7 +58,7 @@ class AvatarAdapter(private val onAvatarClickListener: (avatarId: Int) -> Unit) 
                 .asBitmap()
                 .load("https://storage.googleapis.com/vegefinder-bucket/${avatar.fileName}")
                 .centerCrop()
-                .placeholder(R.drawable.kangkung)
+                .placeholder(R.drawable.vegefinder)
                 .into(avatarImageView)
 
             if (selectedPosition == adapterPosition) {

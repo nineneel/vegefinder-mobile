@@ -16,12 +16,18 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Activity.ProfileActivity
+import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.databinding.ActivityMainBinding
+import com.dicoding.vegefinder.viewmodel.UserViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    private lateinit var userViewModel: UserViewModel
+
 
     companion object {
         const val CAMERA_X_RESULT = 200
@@ -67,10 +73,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val sessionManager = SessionManager(this@MainActivity)
-        val token = sessionManager.getUserToken()
+        userViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[UserViewModel::class.java]
 
-        Log.d("HOME", "token: $token")
+        val sessionManager = SessionManager(this@MainActivity)
+
+        userViewModel.setUser()
+        userViewModel.getUserResponse().observe(this) { user ->
+            if (user != null && user.id != 0){
+                sessionManager.saveUser(user)
+            } else{
+                Toast.makeText(this, "Session has been expired!", Toast.LENGTH_SHORT).show()
+                sessionManager.clearSession()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finishAffinity()
+            }
+        }
+
+
 
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
@@ -85,29 +107,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> replaceFragment(Home())
                 R.id.explore -> replaceFragment(Explore())
                 R.id.saved -> replaceFragment(Saved())
-
-                else ->{
-
-                }
             }
             true
         }
 
         val fragmentKey = intent.getStringExtra("FRAGMENT_KEY")
         if (fragmentKey == "saved") {
-            val fragment = Saved()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, fragment)
-                .commit()
+            replaceFragment(Saved())
+            binding.bottomNavigationView.menu.findItem(R.id.saved).isChecked = true
         }
 
-        val nightMode = getSharedPreferences("MODE", Context.MODE_PRIVATE)
-            .getBoolean("night", false)
-        if (nightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
+
     }
 
     override fun onResume() {
@@ -138,8 +148,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private  fun replaceFragment(fragment: Fragment){
-
+    private  fun replaceFragment(fragment: Fragment)
+    {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout,fragment)

@@ -15,6 +15,9 @@ import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.data.request.LoginRequest
 import com.dicoding.vegefinder.databinding.ActivityLoginBinding
 import com.dicoding.vegefinder.viewmodel.LoginViewModel
+import com.dicoding.vegefinder.data.Result
+
+import kotlin.math.log
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
@@ -79,45 +82,54 @@ class LoginActivity : AppCompatActivity() {
                 binding.etPassword.text.toString()
             )
 
-            loginViewModel.login(data)
-            loginViewModel.getLoginResponse().observe(this) { response ->
-                if(totalResponse <= currentResponse){
-                    if (response != null) {
-                        if (response.status == "success") {
-                            sessionManager.saveAuthToken(response.token)
-                            sessionManager.setLogin(true)
+            loginViewModel.login(data).observe(this){result ->
+                when(result){
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    }
+                    is Result.Success -> {
+                        showLoading(false)
+                        val response = result.data
+                        if(response != null){
+                            if (response.status == "success") {
+                                sessionManager.saveAuthToken(response.token)
+                                sessionManager.setLogin(true)
 
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            val status = response.status
-                            val errorMessage = response.message
-
-                            if (status == "failed") {
-                                etEmail.error = errorMessage
-                                etEmail.requestFocus()
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
                             } else {
-                                val emailError = response.errors?.email?.getOrNull(0)
-                                val passwordError = response.errors?.password?.getOrNull(0)
+                                val status = response.status
+                                val errorMessage = response.message
 
-                                if (emailError != null) {
-                                    etEmail.error = emailError
+                                if (status == "failed") {
+                                    etEmail.error = errorMessage
                                     etEmail.requestFocus()
-                                }
+                                } else {
+                                    val emailError = response.errors?.email?.getOrNull(0)
+                                    val passwordError = response.errors?.password?.getOrNull(0)
 
-                                if (passwordError != null) {
-                                    etPassword.error = passwordError
-                                    etPassword.requestFocus()
+                                    if (emailError != null) {
+                                        etEmail.error = emailError
+                                        etEmail.requestFocus()
+                                    }
+
+                                    if (passwordError != null) {
+                                        etPassword.error = passwordError
+                                        etPassword.requestFocus()
+                                    }
                                 }
                             }
+                        }else{
+                            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                         }
-                        showLoading(false)
+
                     }
-                    totalResponse ++
-                    currentResponse = 0
                 }
-                currentResponse ++
             }
         }
 

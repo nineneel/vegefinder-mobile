@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.dicoding.vegefinder.data.Result
 import com.dicoding.vegefinder.api.RetrofitClient
 import com.dicoding.vegefinder.data.request.LoginRequest
 import com.dicoding.vegefinder.data.response.LoginResponse
@@ -14,10 +16,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
+    fun login(loginRequest: LoginRequest) : LiveData<Result<LoginResponse?>> = liveData {
+        emit(Result.Loading)
+        val returnValue = MutableLiveData<Result<LoginResponse?>>()
+        var returnErrorValue: String? = null
 
-    val loginResponse = MutableLiveData<LoginResponse>()
-
-    fun login(loginRequest: LoginRequest) {
         RetrofitClient.apiInstance
             .login(loginRequest)
             .enqueue(object : Callback<LoginResponse> {
@@ -29,19 +32,21 @@ class LoginViewModel : ViewModel() {
                     val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
 
                     if (response.isSuccessful) {
-                        loginResponse.postValue(response.body())
+                        returnValue.value = Result.Success(response.body())
                     }else{
-                        loginResponse.postValue(errorResponse)
+                        returnValue.value = Result.Success(errorResponse)
                     }
                 }
 
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    loginResponse.postValue(null)
+                override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
+                    returnErrorValue = t.message.toString()
                 }
             })
-    }
 
-    fun getLoginResponse(): LiveData<LoginResponse> {
-        return loginResponse
+        if(returnErrorValue != null){
+            emit(Result.Error(returnErrorValue!!))
+        }
+
+        emitSource(returnValue)
     }
 }

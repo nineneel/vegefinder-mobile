@@ -56,7 +56,7 @@ class HistoryAllAdapter (private val context: Context) :
                     .asBitmap()
                     .load("https://storage.googleapis.com/vegefinder-bucket/${item.thumbnail}")
                     .centerCrop()
-                    .placeholder(R.drawable.kangkung)
+                    .placeholder(R.drawable.vegefinder)
                     .into(imageView)
 
                 val itemTypesName = item.types.map{it.name} as ArrayList<String>

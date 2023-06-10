@@ -8,12 +8,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.LoginActivity
@@ -32,6 +34,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private lateinit var logoutViewModel: LogoutViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var loadingLayout: View
     private var nightMode: Boolean = false
     private var editor: SharedPreferences.Editor? = null
     private var sharedPreferences: SharedPreferences? = null
@@ -41,8 +44,12 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        setSupportActionBar(toolbar)
+        assert(supportActionBar != null)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Profile"
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         sessionManager = SessionManager(this)
 
@@ -68,10 +75,11 @@ class ProfileActivity : AppCompatActivity() {
         val websiteButton: ImageButton = findViewById(R.id.ib_website)
         val logOutButton: TextView = findViewById(R.id.tv_logout)
 
-        val currentUser: User? = sessionManager.getUser()
-        Log.d("EXPLORE TEXT", "Vegetable List: $currentUser")
+        loadingLayout = findViewById(R.id.loading_layout)
 
-        if(currentUser != null){
+        val currentUser: User? = sessionManager.getUser()
+
+        if (currentUser != null) {
             nameTextView.text = currentUser.name
             emailTextView.text = currentUser.email
             Glide.with(this)
@@ -80,7 +88,7 @@ class ProfileActivity : AppCompatActivity() {
                 .centerCrop()
                 .placeholder(R.drawable.vegefinder)
                 .into(profileImageView)
-        }else{
+        } else {
             userViewModel.setUser()
             userViewModel.getUserResponse().observe(this) { user ->
                 if (user != null) {
@@ -102,6 +110,7 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("FRAGMENT_KEY", "saved")
             startActivity(intent)
+            finishAffinity()
         }
 
         historyTextView.setOnClickListener {
@@ -156,17 +165,18 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         logOutButton.setOnClickListener {
+            showLoading(true)
             logoutViewModel.logout()
             logoutViewModel.getLogoutResponse().observe(this) { response ->
                 if (response != null) {
                     Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
-                    sessionManager.clearSession()
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finishAffinity()
-                }else{
-                    sessionManager.clearSession()
+                } else {
                     Toast.makeText(this, "logout error", Toast.LENGTH_SHORT).show()
                 }
+                sessionManager.clearSession()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finishAffinity()
+                showLoading(false)
             }
 
         }
@@ -179,5 +189,10 @@ class ProfileActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun showLoading(state: Boolean) {
+        loadingLayout.visibility = if (state) View.VISIBLE else View.GONE
     }
 }

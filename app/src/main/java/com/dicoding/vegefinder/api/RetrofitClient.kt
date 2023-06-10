@@ -6,8 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-//    private const val BASE_URL = "http://35.202.36.69/api/v1/"
-    private const val BASE_URL = "http://192.168.1.2:8000/api/v1/"
+    private const val BASE_URL = "http://35.202.36.69/api/v1/"
+//    private const val BASE_URL = "http://192.168.1.2:8000/api/v1/"
 //    private const val BASE_URL = "https://vegefinder-api-pl6a2qwedq-et.a.run.app/api/v1/"
 
     private var okHttpClient: OkHttpClient = OkHttpClient.Builder()
