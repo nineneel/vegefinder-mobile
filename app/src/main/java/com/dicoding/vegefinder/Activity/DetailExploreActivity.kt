@@ -9,23 +9,18 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.vegefinder.Adapter.TypeTagAdapter
 import com.dicoding.vegefinder.R
-import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.getScreenHeight
-import com.dicoding.vegefinder.getScreenWidth
 import com.dicoding.vegefinder.viewmodel.SaveVegetableViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import org.w3c.dom.Text
 
 class DetailExploreActivity : AppCompatActivity() {
 
@@ -97,7 +92,8 @@ class DetailExploreActivity : AppCompatActivity() {
             typesGroupName?.let { it1 ->
                 TypeTagAdapter(
                     it,
-                    it1, this
+                    it1,
+                    true
                 )
             }
         }

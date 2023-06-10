@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.dicoding.vegefinder.data.model.Avatar;
+import com.dicoding.vegefinder.data.model.User;
 import com.dicoding.vegefinder.data.model.Vegetable;
 import com.dicoding.vegefinder.data.model.VegetableType;
 import com.google.gson.Gson;
@@ -353,6 +355,11 @@ public class TinyDB {
         return (T)value;
     }
 
+    public User getUser(String key){
+
+        String json = getString(key);
+        return new Gson().fromJson(json, User.class);
+    }
 
     public ArrayList<Vegetable> getVegetableList(String key){
         Gson gson = new Gson();
@@ -375,6 +382,19 @@ public class TinyDB {
 
         for(String jObjString : objStrings){
             VegetableType value  = gson.fromJson(jObjString,  VegetableType.class);
+            objects.add(value);
+        }
+        return objects;
+    }
+
+    public ArrayList<Avatar> getAvatarList(String key){
+        Gson gson = new Gson();
+
+        ArrayList<String> objStrings = getListString(key);
+        ArrayList<Avatar> objects =  new ArrayList<Avatar>();
+
+        for(String jObjString : objStrings){
+            Avatar value  = gson.fromJson(jObjString,  Avatar.class);
             objects.add(value);
         }
         return objects;
@@ -528,6 +548,12 @@ public class TinyDB {
     	putListString(key, objStrings);
     }
 
+    public void putUser(String key, User user){
+        checkForNullKey(key);
+        Gson gson = new Gson();
+        putString(key, gson.toJson(user));
+    }
+
     /**
      * Put ObJect any type into SharedPrefrences with 'key' and save
      * @param key SharedPreferences key
@@ -550,6 +576,17 @@ public class TinyDB {
     }
 
     public void putListTypeVegetable(String key, ArrayList<VegetableType> objArray){
+        checkForNullKey(key);
+        Gson gson = new Gson();
+        ArrayList<String> objStrings = new ArrayList<String>();
+        for(Object obj : objArray){
+            objStrings.add(gson.toJson(obj));
+        }
+        putListString(key, objStrings);
+    }
+
+
+    public void putListAvatar(String key, ArrayList<Avatar> objArray){
         checkForNullKey(key);
         Gson gson = new Gson();
         ArrayList<String> objStrings = new ArrayList<String>();

@@ -21,10 +21,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: TextView
+    private lateinit var loadingLayout: View
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
-
     private lateinit var sessionManager: SessionManager
+
+    private var totalResponse : Int = 0
+    private var currentResponse: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
+        loadingLayout = findViewById(R.id.loading_layout)
 
         etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
@@ -68,50 +72,52 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            showLoading(true)
+
             val data = LoginRequest(
                 binding.etEmail.text.toString(),
                 binding.etPassword.text.toString()
             )
 
-            showLoading(true)
             loginViewModel.login(data)
             loginViewModel.getLoginResponse().observe(this) { response ->
-                if (response != null) {
+                if(totalResponse <= currentResponse){
+                    if (response != null) {
+                        if (response.status == "success") {
+                            sessionManager.saveAuthToken(response.token)
+                            sessionManager.setLogin(true)
 
-                    if (response.status == "success") {
-                        sessionManager.saveAuthToken(response.token)
-                        sessionManager.setLogin(true)
-
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        val status = response.status
-                        val errorMessage = response.message
-
-                        if (status == "failed") {
-                            etEmail.error = errorMessage
-                            etEmail.requestFocus()
-                            return@observe
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         } else {
-                            val emailError = response.errors?.email?.getOrNull(0)
-                            val passwordError = response.errors?.password?.getOrNull(0)
+                            val status = response.status
+                            val errorMessage = response.message
 
-                            if (emailError != null) {
-                                etEmail.error = emailError
+                            if (status == "failed") {
+                                etEmail.error = errorMessage
                                 etEmail.requestFocus()
-                                return@observe
-                            }
+                            } else {
+                                val emailError = response.errors?.email?.getOrNull(0)
+                                val passwordError = response.errors?.password?.getOrNull(0)
 
-                            if (passwordError != null) {
-                                etPassword.error = passwordError
-                                etPassword.requestFocus()
-                                return@observe
+                                if (emailError != null) {
+                                    etEmail.error = emailError
+                                    etEmail.requestFocus()
+                                }
+
+                                if (passwordError != null) {
+                                    etPassword.error = passwordError
+                                    etPassword.requestFocus()
+                                }
                             }
                         }
+                        showLoading(false)
                     }
+                    totalResponse ++
+                    currentResponse = 0
                 }
-                showLoading(false)
+                currentResponse ++
             }
         }
 
@@ -123,6 +129,6 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun showLoading(state: Boolean) {
-        binding.progressBar.visibility = if (state) View.VISIBLE else View.GONE
+        loadingLayout.visibility = if (state) View.VISIBLE else View.GONE
     }
 }

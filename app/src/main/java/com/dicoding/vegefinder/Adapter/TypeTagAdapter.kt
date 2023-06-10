@@ -1,21 +1,20 @@
 package com.dicoding.vegefinder.Adapter
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.dicoding.vegefinder.Activity.DetailExploreActivity
 import com.dicoding.vegefinder.R
 import com.google.android.material.card.MaterialCardView
 
 
-class TypeTagAdapter(private val typeList: ArrayList<String>, private val typeGroupList: ArrayList<Int>, private val context: Context) : RecyclerView.Adapter<TypeTagAdapter.ViewHolder>() {
+class TypeTagAdapter(private val typeList: ArrayList<String>, private val typeGroupList: ArrayList<Int>, private val isDetail: Boolean) : RecyclerView.Adapter<TypeTagAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeTagAdapter.ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_type, parent, false)
+            LayoutInflater.from(parent.context).inflate(if(isDetail) R.layout.item_type else R.layout.item_saved_type , parent, false)
         return ViewHolder(view)
     }
 
@@ -32,7 +31,7 @@ class TypeTagAdapter(private val typeList: ArrayList<String>, private val typeGr
         private val cardView: MaterialCardView = itemView.findViewById(R.id.card_view)
 
         fun bind(name: String) {
-//            cardView.strokeColor = getColorForBaseColor(typeGroupList[adapterPosition])
+            if(!isDetail) cardView.strokeColor = getColorForBaseColor(typeGroupList[adapterPosition])
             cardView.setCardBackgroundColor(getColorForTintColor(typeGroupList[adapterPosition]))
             nameTextView.setTextColor(getColorForBaseColor(typeGroupList[adapterPosition]))
             nameTextView.text = name
@@ -57,6 +56,7 @@ class TypeTagAdapter(private val typeList: ArrayList<String>, private val typeGr
                 else -> Color.parseColor("#EEF7E8") // Default color
             }
         }
+
     }
 }
 

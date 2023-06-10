@@ -2,6 +2,7 @@ package com.dicoding.vegefinder.api
 
 
 import com.dicoding.vegefinder.SessionManager
+import com.dicoding.vegefinder.data.model.Avatar
 import com.dicoding.vegefinder.data.model.User
 import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.data.model.VegetableType
@@ -26,6 +27,10 @@ interface Api {
     @POST("login")
     @Headers("X-Requested-With: XMLHttpRequest")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
+
+    @GET("avatars")
+    @Headers("X-Requested-With: XMLHttpRequest")
+    fun getAvatars(): Call<ArrayList<Avatar>>
 
     @GET("user")
     @Headers("X-Requested-With: XMLHttpRequest")

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.dicoding.vegefinder.api.RetrofitClient
 import com.dicoding.vegefinder.data.model.Vegetable
 import com.dicoding.vegefinder.data.model.VegetableType
+import com.dicoding.vegefinder.data.response.LoginResponse
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +27,8 @@ class VegetableViewModel:ViewModel() {
                 ){
                     if (response.isSuccessful) {
                         vegetableResponse.postValue(response.body())
+                    }else{
+                        vegetableResponse.postValue(null)
                     }
                 }
 
