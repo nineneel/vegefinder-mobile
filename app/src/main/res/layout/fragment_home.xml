@@ -36,8 +36,8 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_roundedtype"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/feature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -78,7 +77,6 @@
             android:baselineAligned="false">
 
             <LinearLayout
-                android:id="@+id/store_feature_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,6 +84,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
+                    android:id="@+id/vegestore_feature_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -106,7 +105,6 @@
 
 
             <LinearLayout
-                android:id="@+id/forum_feature_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -124,7 +122,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="7dp"
                     android:text="VegeForum"
-                    android:textColor="@color/purple"
+                    android:textColor="@color/grey"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -132,7 +130,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/news_feature_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -160,14 +157,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/feature_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
             android:paddingBottom="24dp">
 
             <LinearLayout
-                android:id="@+id/vegelife_feature_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -194,7 +189,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/vegecook_feature_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -220,7 +214,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/vegefest_feature"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -262,7 +255,6 @@
             android:paddingHorizontal="4dp">
 
             <TextView
-                android:id="@+id/type_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
@@ -329,7 +321,6 @@
 
 
         <View
-            android:id="@+id/outline_view_2"
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
             android:alpha="0.5"
@@ -344,7 +335,6 @@
             android:paddingHorizontal="4dp">
 
             <TextView
-                android:id="@+id/history_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"

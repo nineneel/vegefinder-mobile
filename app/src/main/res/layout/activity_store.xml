@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.store.StoreActivity"
+    android:background="?attr/colorSecondary">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/custom_appbar_store"/>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomStoreNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"/>
+
+    <View
+        android:id="@+id/outline_view"
+        android:layout_width="0dp"
+        android:layout_height="1.5dp"
+        android:background="#969696"
+        android:alpha="0.1"
+        app:layout_constraintBottom_toTopOf="@+id/bottomStoreNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomStoreNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="3dp"
+        android:layout_gravity="center"
+        app:elevation="8dp"
+        android:background="@drawable/bottom_nav_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/store_bottom">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

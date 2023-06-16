@@ -8,11 +8,10 @@
         android:id="@+id/explore"
         android:icon="@drawable/discovery_icon"/>
     <item android:title=""
-        android:enabled="false"
-        android:id="@+id/placeholder" />
-    <item android:title="Store"
-        android:id="@+id/store"
-        android:icon="@drawable/store_icon"/>
+        android:enabled="false" />
+    <item android:title="Garden"
+        android:id="@+id/garden"
+        android:icon="@drawable/garden_icon_2"/>
     <item android:title="Saved"
         android:id="@+id/saved"
         android:icon="@drawable/saved"/>

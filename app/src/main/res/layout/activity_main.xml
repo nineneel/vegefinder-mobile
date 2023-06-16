@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ui.main.MainActivity"
     android:background="?attr/colorSecondary">
 
     <include
@@ -41,8 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/transparent_bg"
-                app:menu="@menu/bottom_nav">
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/bottom_nav"
+                android:background="@drawable/transparent_bg">
 
             </com.google.android.material.bottomnavigation.BottomNavigationView>
 

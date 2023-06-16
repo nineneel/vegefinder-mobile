@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".ui.auth.LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -99,7 +98,8 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/button_background"
-                android:text="Login" />
+                android:text="Login"
+                android:textColor="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -117,7 +117,6 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/login_google"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
@@ -126,7 +125,6 @@
                     android:src="@drawable/google" />
 
                 <ImageButton
-                    android:id="@+id/login_facebook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"

@@ -2,38 +2,51 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_vegefinder"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.VegeFinder"
         tools:targetApi="31">
         <activity
-            android:name=".CameraActivity"
+            android:name=".PredictionPreviewAcvity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".CameraTwoActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.store.activity.DetailProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.vegetable.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
-        </activity>
-        <activity
-            android:name=".Activity.SplashActivity"
-            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,42 +54,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.DetailSavedActivity"
+            android:name=".ui.vegetable.VegetableActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DetailExploreActivity"
+            android:name=".ui.profile.AboutActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.AboutActivity"
+            android:name=".ui.history.HistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.HistoryActivity"
+            android:name=".ui.type.TypesActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.TypesActivity"
+            android:name=".ui.type.DetailTypeActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DetailHistoryActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.DetailJenisActivity"
+            android:name=".ui.store.StoreActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false">
-        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.dicoding.vegefinder"
+            android:authorities="com.bangkit.vegefinder"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
