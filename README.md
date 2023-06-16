@@ -17,14 +17,12 @@ VegeFinder is an application that helps young people who want to start farming. 
 
 ## Features
 
--   User authentication and registration for login and registration functionality.
--   Vegetable prediction to identify and classify different types of vegetables.
--   Vegetable library that provides information, images, and details about various vegetables.
--   Store functionality to browse and purchase.
--   Save vegetable feature to bookmark and store favorite vegetables for future reference.
--   History feature that keeps track of previously scanned vegetables for easy access.
-
-## Screenshots
+-   User authentication Login and Register
+-   Vegetable prediction
+-   Vegetable library
+-   VegeStore
+-   Save vegetable
+-   History
 
 ## Screenshots
 
